@@ -15,7 +15,7 @@ const (
 	// failures due to state changes that might occur between the tx simulation
 	// and the actual run.
 	DefaultGasAdjustment = 1.2
-	DefaultGasLimit      = 200000
+	DefaultGasLimit      = 25000
 
 	FlagAuto = "auto"
 
