@@ -24,13 +24,54 @@ func (k Keeper) AllocateTokens(
 	// (and distributed to the previous proposer)
 	feeCollector := k.authKeeper.GetModuleAccount(ctx, k.feeCollectorName)
 	feesCollectedInt := k.bankKeeper.GetAllBalances(ctx, feeCollector.GetAddress())
-	feesCollected := sdk.NewDecCoinsFromCoins(feesCollectedInt...)
 
 	// transfer collected fees to the distribution module account
 	err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, k.feeCollectorName, types.ModuleName, feesCollectedInt)
 	if err != nil {
 		panic(err)
 	}
+
+	ratio := k.GetRatio(ctx)
+
+	if len(feesCollectedInt) > 0 {
+		// burn fee: ratio.Burn
+		burnFee := k.CalculatePercentage(feesCollectedInt, ratio.Burn)
+		err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, burnFee)
+		if err != nil {
+			panic(err)
+		}
+
+		// emit burn fee
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeBurnFee,
+				sdk.NewAttribute(sdk.AttributeKeyAmount, burnFee.String()),
+			),
+		)
+		logger.Info("Event Emitted", "type", types.EventTypeBurnFee, "key", sdk.AttributeKeyAmount, "value", burnFee.String())
+
+		// base fee: ratio.Base
+		baseAddr := sdk.MustAccAddressFromBech32(k.GetBaseAddress(ctx))
+		baseFee := k.CalculatePercentage(feesCollectedInt, ratio.Base)
+		err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, baseAddr, baseFee)
+		if err != nil {
+			panic(err)
+		}
+
+		// emit base fee
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeBaseFee,
+				sdk.NewAttribute(sdk.AttributeKeyAmount, baseFee.String()),
+			),
+		)
+		logger.Info("Event Emitted", "type", types.EventTypeBaseFee, "key", sdk.AttributeKeyAmount, "value", baseFee.String())
+
+		feesCollectedInt = feesCollectedInt.Sub(burnFee...).Sub(baseFee...)
+	}
+
+	feesCollected := sdk.NewDecCoinsFromCoins(feesCollectedInt...)
+	logger.Info("Staking Rewards", "key", sdk.AttributeKeyAmount, "value", feesCollected.String())
 
 	// temporary workaround to keep CanWithdrawInvariant happy
 	// general discussions here: https://github.com/cosmos/cosmos-sdk/issues/2906#issuecomment-441867634
@@ -62,7 +103,6 @@ func (k Keeper) AllocateTokens(
 				sdk.NewAttribute(types.AttributeKeyValidator, proposerValidator.GetOperator().String()),
 			),
 		)
-
 		k.AllocateTokensToValidator(ctx, proposerValidator, proposerReward)
 		remaining = remaining.Sub(proposerReward)
 	} else {
@@ -104,6 +144,7 @@ func (k Keeper) AllocateTokens(
 	// allocate community funding
 	feePool.CommunityPool = feePool.CommunityPool.Add(remaining...)
 	k.SetFeePool(ctx, feePool)
+	logger.Info("Community Pool", "key", sdk.AttributeKeyAmount, "value", remaining.String())
 }
 
 // AllocateTokensToValidator allocate tokens to a particular validator,
@@ -112,6 +153,7 @@ func (k Keeper) AllocateTokensToValidator(ctx sdk.Context, val stakingtypes.Vali
 	// split tokens between validator and delegators according to commission
 	commission := tokens.MulDec(val.GetCommission())
 	shared := tokens.Sub(commission)
+	logger := k.Logger(ctx)
 
 	// update current commission
 	ctx.EventManager().EmitEvent(
@@ -121,6 +163,7 @@ func (k Keeper) AllocateTokensToValidator(ctx sdk.Context, val stakingtypes.Vali
 			sdk.NewAttribute(types.AttributeKeyValidator, val.GetOperator().String()),
 		),
 	)
+
 	currentCommission := k.GetValidatorAccumulatedCommission(ctx, val.GetOperator())
 	currentCommission.Commission = currentCommission.Commission.Add(commission...)
 	k.SetValidatorAccumulatedCommission(ctx, val.GetOperator(), currentCommission)
@@ -138,8 +181,21 @@ func (k Keeper) AllocateTokensToValidator(ctx sdk.Context, val stakingtypes.Vali
 			sdk.NewAttribute(types.AttributeKeyValidator, val.GetOperator().String()),
 		),
 	)
+	logger.Info("Event Emitted", "type", types.EventTypeRewards, "key", sdk.AttributeKeyAmount, "value", tokens.String())
+	logger.Info("Event Emitted", "type", types.EventTypeRewards, "key", types.AttributeKeyValidator, "value", val.GetOperator().String())
 
 	outstanding := k.GetValidatorOutstandingRewards(ctx, val.GetOperator())
 	outstanding.Rewards = outstanding.Rewards.Add(tokens...)
 	k.SetValidatorOutstandingRewards(ctx, val.GetOperator(), outstanding)
+}
+
+// CalculatePercentage computes a percentage of sdk.Coins
+func (k Keeper) CalculatePercentage(coins sdk.Coins, percentage sdk.Dec) sdk.Coins {
+	var result sdk.Coins
+	for _, coin := range coins {
+		// Calculate percentage of the coin's amount
+		amount := percentage.MulInt(coin.Amount).TruncateInt()
+		result = result.Add(sdk.NewCoin(coin.Denom, amount))
+	}
+	return result
 }

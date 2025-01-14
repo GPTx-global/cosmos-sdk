@@ -143,3 +143,66 @@ func (k msgServer) FundCommunityPool(goCtx context.Context, msg *types.MsgFundCo
 
 	return &types.MsgFundCommunityPoolResponse{}, nil
 }
+
+func (k msgServer) ChangeRatio(goCtx context.Context, msg *types.MsgChangeRatio) (*types.MsgChangeRatioResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	moderator := k.GetModeratorAddress(ctx)
+	if msg.ModeratorAddress != moderator {
+		return nil, types.ErrInvalidModerator.Wrapf("expected: %s, got: %s", moderator, msg.ModeratorAddress)
+	}
+
+	k.Keeper.SetRatio(ctx, msg.Ratio)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeChangeRatio,
+			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.ModeratorAddress),
+		),
+	)
+
+	return &types.MsgChangeRatioResponse{}, nil
+}
+
+func (k msgServer) ChangeBaseAddress(goCtx context.Context, msg *types.MsgChangeBaseAddress) (*types.MsgChangeBaseAddressResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	moderator := k.GetModeratorAddress(ctx)
+	if msg.ModeratorAddress != moderator {
+		return nil, types.ErrInvalidModerator.Wrapf("expected: %s, got: %s", moderator, msg.ModeratorAddress)
+	}
+
+	k.Keeper.SetBaseAddress(ctx, msg.NewBaseAddress)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeChangeBaseAddress,
+			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.ModeratorAddress),
+		),
+	)
+
+	return &types.MsgChangeBaseAddressResponse{}, nil
+}
+
+func (k msgServer) ChangeModerator(goCtx context.Context, msg *types.MsgChangeModerator) (*types.MsgChangeModeratorResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	moderator := k.GetModeratorAddress(ctx)
+	if msg.ModeratorAddress != moderator {
+		return nil, types.ErrInvalidModerator.Wrapf("expected: %s, got: %s", moderator, msg.ModeratorAddress)
+	}
+
+	k.Keeper.SetModeratorAddress(ctx, msg.NewModeratorAddress)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeChangeModerator,
+			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.ModeratorAddress),
+		),
+	)
+
+	return &types.MsgChangeModeratorResponse{}, nil
+}

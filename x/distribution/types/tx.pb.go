@@ -359,6 +359,276 @@ func (m *MsgFundCommunityPoolResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgFundCommunityPoolResponse proto.InternalMessageInfo
 
+// MsgChangeRatio allows to set new tx fee distribution ratio
+type MsgChangeRatio struct {
+	ModeratorAddress string `protobuf:"bytes,1,opt,name=moderator_address,json=moderatorAddress,proto3" json:"moderator_address,omitempty"`
+	Ratio            Ratio  `protobuf:"bytes,2,opt,name=ratio,proto3" json:"ratio"`
+}
+
+func (m *MsgChangeRatio) Reset()         { *m = MsgChangeRatio{} }
+func (m *MsgChangeRatio) String() string { return proto.CompactTextString(m) }
+func (*MsgChangeRatio) ProtoMessage()    {}
+func (*MsgChangeRatio) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ed4f433d965e58ca, []int{8}
+}
+func (m *MsgChangeRatio) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgChangeRatio) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgChangeRatio.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgChangeRatio) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgChangeRatio.Merge(m, src)
+}
+func (m *MsgChangeRatio) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgChangeRatio) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgChangeRatio.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgChangeRatio proto.InternalMessageInfo
+
+func (m *MsgChangeRatio) GetModeratorAddress() string {
+	if m != nil {
+		return m.ModeratorAddress
+	}
+	return ""
+}
+
+func (m *MsgChangeRatio) GetRatio() Ratio {
+	if m != nil {
+		return m.Ratio
+	}
+	return Ratio{}
+}
+
+// MsgChangeRatioResponse defines the Msg/ChangeRatio response type
+type MsgChangeRatioResponse struct {
+}
+
+func (m *MsgChangeRatioResponse) Reset()         { *m = MsgChangeRatioResponse{} }
+func (m *MsgChangeRatioResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgChangeRatioResponse) ProtoMessage()    {}
+func (*MsgChangeRatioResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ed4f433d965e58ca, []int{9}
+}
+func (m *MsgChangeRatioResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgChangeRatioResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgChangeRatioResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgChangeRatioResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgChangeRatioResponse.Merge(m, src)
+}
+func (m *MsgChangeRatioResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgChangeRatioResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgChangeRatioResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgChangeRatioResponse proto.InternalMessageInfo
+
+// MsgChangeBaseAddress allows to set new base address
+type MsgChangeBaseAddress struct {
+	ModeratorAddress string `protobuf:"bytes,1,opt,name=moderator_address,json=moderatorAddress,proto3" json:"moderator_address,omitempty"`
+	NewBaseAddress   string `protobuf:"bytes,2,opt,name=new_base_address,json=newBaseAddress,proto3" json:"new_base_address,omitempty"`
+}
+
+func (m *MsgChangeBaseAddress) Reset()         { *m = MsgChangeBaseAddress{} }
+func (m *MsgChangeBaseAddress) String() string { return proto.CompactTextString(m) }
+func (*MsgChangeBaseAddress) ProtoMessage()    {}
+func (*MsgChangeBaseAddress) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ed4f433d965e58ca, []int{10}
+}
+func (m *MsgChangeBaseAddress) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgChangeBaseAddress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgChangeBaseAddress.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgChangeBaseAddress) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgChangeBaseAddress.Merge(m, src)
+}
+func (m *MsgChangeBaseAddress) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgChangeBaseAddress) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgChangeBaseAddress.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgChangeBaseAddress proto.InternalMessageInfo
+
+func (m *MsgChangeBaseAddress) GetModeratorAddress() string {
+	if m != nil {
+		return m.ModeratorAddress
+	}
+	return ""
+}
+
+func (m *MsgChangeBaseAddress) GetNewBaseAddress() string {
+	if m != nil {
+		return m.NewBaseAddress
+	}
+	return ""
+}
+
+// MsgChangeBaseAddressResponse defines the Msg/ChangeBaseAddress response type
+type MsgChangeBaseAddressResponse struct {
+}
+
+func (m *MsgChangeBaseAddressResponse) Reset()         { *m = MsgChangeBaseAddressResponse{} }
+func (m *MsgChangeBaseAddressResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgChangeBaseAddressResponse) ProtoMessage()    {}
+func (*MsgChangeBaseAddressResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ed4f433d965e58ca, []int{11}
+}
+func (m *MsgChangeBaseAddressResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgChangeBaseAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgChangeBaseAddressResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgChangeBaseAddressResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgChangeBaseAddressResponse.Merge(m, src)
+}
+func (m *MsgChangeBaseAddressResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgChangeBaseAddressResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgChangeBaseAddressResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgChangeBaseAddressResponse proto.InternalMessageInfo
+
+// MsgChangeModerator allows to set new moderator
+type MsgChangeModerator struct {
+	ModeratorAddress    string `protobuf:"bytes,1,opt,name=moderator_address,json=moderatorAddress,proto3" json:"moderator_address,omitempty"`
+	NewModeratorAddress string `protobuf:"bytes,2,opt,name=new_moderator_address,json=newModeratorAddress,proto3" json:"new_moderator_address,omitempty"`
+}
+
+func (m *MsgChangeModerator) Reset()         { *m = MsgChangeModerator{} }
+func (m *MsgChangeModerator) String() string { return proto.CompactTextString(m) }
+func (*MsgChangeModerator) ProtoMessage()    {}
+func (*MsgChangeModerator) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ed4f433d965e58ca, []int{12}
+}
+func (m *MsgChangeModerator) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgChangeModerator) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgChangeModerator.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgChangeModerator) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgChangeModerator.Merge(m, src)
+}
+func (m *MsgChangeModerator) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgChangeModerator) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgChangeModerator.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgChangeModerator proto.InternalMessageInfo
+
+func (m *MsgChangeModerator) GetModeratorAddress() string {
+	if m != nil {
+		return m.ModeratorAddress
+	}
+	return ""
+}
+
+func (m *MsgChangeModerator) GetNewModeratorAddress() string {
+	if m != nil {
+		return m.NewModeratorAddress
+	}
+	return ""
+}
+
+// MsgChangeModeratorResponse defines the Msg/ChangeModerator response type
+type MsgChangeModeratorResponse struct {
+}
+
+func (m *MsgChangeModeratorResponse) Reset()         { *m = MsgChangeModeratorResponse{} }
+func (m *MsgChangeModeratorResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgChangeModeratorResponse) ProtoMessage()    {}
+func (*MsgChangeModeratorResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ed4f433d965e58ca, []int{13}
+}
+func (m *MsgChangeModeratorResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgChangeModeratorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgChangeModeratorResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgChangeModeratorResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgChangeModeratorResponse.Merge(m, src)
+}
+func (m *MsgChangeModeratorResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgChangeModeratorResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgChangeModeratorResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgChangeModeratorResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgSetWithdrawAddress)(nil), "cosmos.distribution.v1beta1.MsgSetWithdrawAddress")
 	proto.RegisterType((*MsgSetWithdrawAddressResponse)(nil), "cosmos.distribution.v1beta1.MsgSetWithdrawAddressResponse")
@@ -368,6 +638,12 @@ func init() {
 	proto.RegisterType((*MsgWithdrawValidatorCommissionResponse)(nil), "cosmos.distribution.v1beta1.MsgWithdrawValidatorCommissionResponse")
 	proto.RegisterType((*MsgFundCommunityPool)(nil), "cosmos.distribution.v1beta1.MsgFundCommunityPool")
 	proto.RegisterType((*MsgFundCommunityPoolResponse)(nil), "cosmos.distribution.v1beta1.MsgFundCommunityPoolResponse")
+	proto.RegisterType((*MsgChangeRatio)(nil), "cosmos.distribution.v1beta1.MsgChangeRatio")
+	proto.RegisterType((*MsgChangeRatioResponse)(nil), "cosmos.distribution.v1beta1.MsgChangeRatioResponse")
+	proto.RegisterType((*MsgChangeBaseAddress)(nil), "cosmos.distribution.v1beta1.MsgChangeBaseAddress")
+	proto.RegisterType((*MsgChangeBaseAddressResponse)(nil), "cosmos.distribution.v1beta1.MsgChangeBaseAddressResponse")
+	proto.RegisterType((*MsgChangeModerator)(nil), "cosmos.distribution.v1beta1.MsgChangeModerator")
+	proto.RegisterType((*MsgChangeModeratorResponse)(nil), "cosmos.distribution.v1beta1.MsgChangeModeratorResponse")
 }
 
 func init() {
@@ -375,44 +651,57 @@ func init() {
 }
 
 var fileDescriptor_ed4f433d965e58ca = []byte{
-	// 589 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x55, 0x41, 0x6b, 0x13, 0x41,
-	0x14, 0xde, 0xb1, 0x52, 0xe8, 0x78, 0x30, 0x59, 0xa2, 0x4d, 0xb7, 0x3a, 0x29, 0x8b, 0x48, 0x10,
-	0xba, 0x6b, 0x22, 0x28, 0xc6, 0x83, 0x98, 0x58, 0x6f, 0x41, 0x49, 0x41, 0xc1, 0x4b, 0xd9, 0x64,
-	0x86, 0xe9, 0x60, 0x76, 0x27, 0xec, 0x4c, 0x92, 0xf6, 0xa8, 0x08, 0xea, 0x41, 0x10, 0xfc, 0x01,
-	0xf6, 0x28, 0x9e, 0x3c, 0xf8, 0x0f, 0xbc, 0x04, 0xbd, 0x14, 0x4f, 0x9e, 0x54, 0x92, 0x83, 0xfe,
-	0x0c, 0x49, 0x76, 0x76, 0x9b, 0x90, 0x4d, 0xb6, 0xb5, 0xd2, 0xd3, 0x2c, 0xf3, 0xde, 0xf7, 0xcd,
-	0xf7, 0xbd, 0x7d, 0x6f, 0x06, 0x5e, 0x6a, 0x70, 0xe1, 0x72, 0x61, 0x63, 0x26, 0xa4, 0xcf, 0xea,
-	0x6d, 0xc9, 0xb8, 0x67, 0x77, 0x0a, 0x75, 0x22, 0x9d, 0x82, 0x2d, 0x77, 0xac, 0x96, 0xcf, 0x25,
-	0xd7, 0x57, 0x83, 0x2c, 0x6b, 0x3c, 0xcb, 0x52, 0x59, 0x46, 0x86, 0x72, 0xca, 0x47, 0x79, 0xf6,
-	0xf0, 0x2b, 0x80, 0x18, 0x48, 0x11, 0xd7, 0x1d, 0x41, 0x22, 0xc2, 0x06, 0x67, 0x9e, 0x8a, 0xaf,
-	0x04, 0xf1, 0xad, 0x00, 0xa8, 0xf8, 0x83, 0xd0, 0xb2, 0x82, 0xba, 0x82, 0xda, 0x9d, 0xc2, 0x70,
-	0x09, 0x02, 0xe6, 0x67, 0x00, 0xcf, 0x55, 0x05, 0xdd, 0x24, 0xf2, 0x11, 0x93, 0xdb, 0xd8, 0x77,
-	0xba, 0x77, 0x30, 0xf6, 0x89, 0x10, 0xfa, 0x06, 0x4c, 0x63, 0xd2, 0x24, 0xd4, 0x91, 0xdc, 0xdf,
-	0x72, 0x82, 0xcd, 0x2c, 0x58, 0x03, 0xf9, 0xa5, 0x72, 0xf6, 0xdb, 0xa7, 0xf5, 0x8c, 0xe2, 0x57,
-	0xe9, 0x9b, 0xd2, 0x67, 0x1e, 0xad, 0xa5, 0x22, 0x48, 0x48, 0x53, 0x81, 0xa9, 0xae, 0x62, 0x8e,
-	0x58, 0x4e, 0x25, 0xb0, 0x9c, 0xed, 0x4e, 0x6a, 0x29, 0xa1, 0x97, 0x7b, 0x39, 0xed, 0xcf, 0x5e,
-	0x4e, 0x7b, 0xf6, 0xfb, 0xe3, 0x95, 0x69, 0x59, 0x66, 0x0e, 0x5e, 0x8c, 0x35, 0x51, 0x23, 0xa2,
-	0xc5, 0x3d, 0x41, 0xcc, 0x2f, 0x00, 0x1a, 0x55, 0x41, 0xc3, 0xf0, 0xdd, 0x90, 0xa1, 0x46, 0xba,
-	0x8e, 0x8f, 0xff, 0x97, 0xd7, 0x0d, 0x98, 0xee, 0x38, 0x4d, 0x86, 0x27, 0x68, 0x92, 0xcc, 0xa6,
-	0x22, 0xc8, 0x61, 0xdd, 0xbe, 0x02, 0xd0, 0x9c, 0x6d, 0x26, 0xf4, 0xac, 0x37, 0xe0, 0xa2, 0xe3,
-	0xf2, 0xb6, 0x27, 0xb3, 0x60, 0x6d, 0x21, 0x7f, 0xa6, 0xb8, 0x62, 0xa9, 0xf3, 0x87, 0xfd, 0x13,
-	0xb6, 0x9a, 0x55, 0xe1, 0xcc, 0x2b, 0x5f, 0xed, 0xfd, 0xc8, 0x69, 0x1f, 0x7e, 0xe6, 0xf2, 0x94,
-	0xc9, 0xed, 0x76, 0xdd, 0x6a, 0x70, 0x57, 0xf5, 0x8f, 0x5a, 0xd6, 0x05, 0x7e, 0x62, 0xcb, 0xdd,
-	0x16, 0x11, 0x23, 0x80, 0xa8, 0x29, 0x6a, 0xf3, 0x05, 0x80, 0x68, 0x4c, 0xcb, 0xc3, 0xd0, 0x4b,
-	0x85, 0xbb, 0x2e, 0x13, 0x82, 0x71, 0x2f, 0xbe, 0x2a, 0xe0, 0x98, 0x55, 0x99, 0x62, 0x34, 0x5f,
-	0x03, 0x78, 0x79, 0xbe, 0x92, 0x93, 0xad, 0xcc, 0x57, 0x00, 0x33, 0x55, 0x41, 0xef, 0xb5, 0x3d,
-	0x3c, 0x94, 0xd0, 0xf6, 0x98, 0xdc, 0x7d, 0xc0, 0x79, 0xf3, 0x44, 0x4e, 0xd7, 0xaf, 0xc3, 0x25,
-	0x4c, 0x5a, 0x5c, 0x30, 0xc9, 0xfd, 0xc4, 0x16, 0x3c, 0x48, 0x2d, 0x9d, 0x1f, 0xaf, 0xf2, 0xc1,
-	0xbe, 0x89, 0xe0, 0x85, 0x38, 0x33, 0x61, 0x49, 0x8b, 0xbd, 0xd3, 0x70, 0xa1, 0x2a, 0xa8, 0xfe,
-	0x1c, 0x40, 0x3d, 0xe6, 0x32, 0x29, 0x5a, 0x73, 0xae, 0x3b, 0x2b, 0x76, 0x76, 0x8d, 0xd2, 0xd1,
-	0x31, 0xd1, 0x1f, 0x7e, 0x0b, 0xe0, 0xf2, 0xac, 0x61, 0xbf, 0x91, 0xc4, 0x3b, 0x03, 0x68, 0xdc,
-	0xfe, 0x47, 0x60, 0xa4, 0xea, 0x1d, 0x80, 0xab, 0xf3, 0x26, 0xe5, 0xd6, 0x61, 0x0f, 0x88, 0x01,
-	0x1b, 0x95, 0x63, 0x80, 0x23, 0x85, 0x4f, 0x01, 0x4c, 0x4f, 0x77, 0x6c, 0x21, 0x89, 0x7a, 0x0a,
-	0x62, 0xdc, 0x3c, 0x32, 0x24, 0xd4, 0x50, 0xbe, 0xff, 0xbe, 0x8f, 0x40, 0xaf, 0x8f, 0xc0, 0x7e,
-	0x1f, 0x81, 0x5f, 0x7d, 0x04, 0xde, 0x0c, 0x90, 0xb6, 0x3f, 0x40, 0xda, 0xf7, 0x01, 0xd2, 0x1e,
-	0x17, 0xe6, 0x8e, 0xc2, 0xce, 0xe4, 0xab, 0x3b, 0x9a, 0x8c, 0xfa, 0xe2, 0xe8, 0xa9, 0xbb, 0xf6,
-	0x37, 0x00, 0x00, 0xff, 0xff, 0x8b, 0x65, 0x3b, 0xae, 0x99, 0x07, 0x00, 0x00,
+	// 786 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xcf, 0x6b, 0x13, 0x4f,
+	0x1c, 0xcd, 0x7c, 0xfb, 0xb5, 0xd2, 0x29, 0xb4, 0xe9, 0xda, 0x1f, 0xe9, 0xb6, 0x6e, 0xca, 0x22,
+	0x52, 0x94, 0x6e, 0x4c, 0x0a, 0x16, 0x23, 0x28, 0x26, 0xd6, 0x93, 0x8b, 0x92, 0x82, 0x82, 0x97,
+	0xb2, 0xc9, 0x0e, 0xdb, 0xc1, 0xee, 0x4e, 0xd8, 0x99, 0x74, 0x5b, 0x3c, 0x29, 0x82, 0x7a, 0x10,
+	0x04, 0xff, 0x00, 0x7b, 0x14, 0x2f, 0x7a, 0xf0, 0xa2, 0x37, 0xf1, 0x52, 0xf4, 0x52, 0x3c, 0x79,
+	0x52, 0x49, 0x0f, 0xfa, 0x67, 0xc8, 0xfe, 0x9a, 0x6e, 0xba, 0x49, 0x36, 0xb1, 0xa5, 0xa7, 0x84,
+	0x9d, 0xf7, 0xde, 0xe7, 0xbd, 0x99, 0xcf, 0x7e, 0x66, 0xe1, 0x99, 0x1a, 0xa1, 0x26, 0xa1, 0x39,
+	0x1d, 0x53, 0x66, 0xe3, 0x6a, 0x83, 0x61, 0x62, 0xe5, 0x36, 0xf2, 0x55, 0xc4, 0xb4, 0x7c, 0x8e,
+	0x6d, 0x2a, 0x75, 0x9b, 0x30, 0x22, 0xcc, 0xf8, 0x28, 0x25, 0x8a, 0x52, 0x02, 0x94, 0x38, 0x6e,
+	0x10, 0x83, 0x78, 0xb8, 0x9c, 0xfb, 0xcf, 0xa7, 0x88, 0x52, 0x20, 0x5c, 0xd5, 0x28, 0xe2, 0x82,
+	0x35, 0x82, 0xad, 0x60, 0x5d, 0xe9, 0x56, 0xb8, 0xa5, 0x8e, 0x8f, 0x9f, 0xf6, 0xf1, 0xab, 0x7e,
+	0xa1, 0xc0, 0x8f, 0xbf, 0x34, 0x15, 0x48, 0x99, 0xd4, 0xc8, 0x6d, 0xe4, 0xdd, 0x1f, 0x7f, 0x41,
+	0xfe, 0x0c, 0xe0, 0x84, 0x4a, 0x8d, 0x15, 0xc4, 0xee, 0x62, 0xb6, 0xa6, 0xdb, 0x9a, 0x73, 0x4d,
+	0xd7, 0x6d, 0x44, 0xa9, 0xb0, 0x0c, 0xc7, 0x74, 0xb4, 0x8e, 0x0c, 0x8d, 0x11, 0x7b, 0x55, 0xf3,
+	0x1f, 0x66, 0xc0, 0x1c, 0x98, 0x1f, 0x2a, 0x65, 0xbe, 0xbd, 0x5f, 0x18, 0x0f, 0xf4, 0x03, 0xf8,
+	0x0a, 0xb3, 0xb1, 0x65, 0x54, 0xd2, 0x9c, 0x12, 0xca, 0x94, 0x61, 0xda, 0x09, 0x94, 0xb9, 0xca,
+	0x7f, 0x09, 0x2a, 0xa3, 0x4e, 0xab, 0x97, 0xa2, 0xf4, 0x74, 0x3b, 0x9b, 0xfa, 0xb3, 0x9d, 0x4d,
+	0x3d, 0xfa, 0xfd, 0xee, 0x5c, 0xdc, 0x96, 0x9c, 0x85, 0xa7, 0xdb, 0x86, 0xa8, 0x20, 0x5a, 0x27,
+	0x16, 0x45, 0xf2, 0x17, 0x00, 0x45, 0x95, 0x1a, 0xe1, 0xf2, 0xf5, 0x50, 0xa1, 0x82, 0x1c, 0xcd,
+	0xd6, 0x8f, 0x2a, 0xeb, 0x32, 0x1c, 0xdb, 0xd0, 0xd6, 0xb1, 0xde, 0x22, 0x93, 0x14, 0x36, 0xcd,
+	0x29, 0xbd, 0xa6, 0x7d, 0x06, 0xa0, 0xdc, 0x39, 0x4c, 0x98, 0x59, 0xa8, 0xc1, 0x41, 0xcd, 0x24,
+	0x0d, 0x8b, 0x65, 0xc0, 0xdc, 0xc0, 0xfc, 0x70, 0x61, 0x3a, 0xe8, 0x27, 0xc5, 0xed, 0xb7, 0xb0,
+	0x35, 0x95, 0x32, 0xc1, 0x56, 0xe9, 0xc2, 0xce, 0x8f, 0x6c, 0xea, 0xcd, 0xcf, 0xec, 0xbc, 0x81,
+	0xd9, 0x5a, 0xa3, 0xaa, 0xd4, 0x88, 0x19, 0xf4, 0x4f, 0xf0, 0xb3, 0x40, 0xf5, 0xfb, 0x39, 0xb6,
+	0x55, 0x47, 0xd4, 0x23, 0xd0, 0x4a, 0x20, 0x2d, 0x3f, 0x01, 0x50, 0x8a, 0x78, 0xb9, 0x13, 0x66,
+	0x29, 0x13, 0xd3, 0xc4, 0x94, 0x62, 0x62, 0xb5, 0xdf, 0x15, 0x70, 0xc8, 0x5d, 0x89, 0x29, 0xca,
+	0xcf, 0x01, 0x3c, 0xdb, 0xdd, 0xc9, 0xf1, 0xee, 0xcc, 0x57, 0x00, 0xc7, 0x55, 0x6a, 0xdc, 0x68,
+	0x58, 0xba, 0x6b, 0xa1, 0x61, 0x61, 0xb6, 0x75, 0x9b, 0x90, 0xf5, 0x63, 0xa9, 0x2e, 0x5c, 0x84,
+	0x43, 0x3a, 0xaa, 0x13, 0x8a, 0x19, 0xb1, 0x13, 0x5b, 0x70, 0x1f, 0x5a, 0x9c, 0x8c, 0xee, 0xf2,
+	0xfe, 0x73, 0x59, 0x82, 0xb3, 0xed, 0xc2, 0xf0, 0x17, 0xec, 0x2d, 0x80, 0x23, 0x2a, 0x35, 0xca,
+	0x6b, 0x9a, 0x65, 0xa0, 0x8a, 0xc6, 0x30, 0x71, 0xcf, 0xdd, 0x24, 0x3a, 0xb2, 0xfb, 0x3b, 0x77,
+	0x4e, 0x09, 0x5f, 0xaa, 0x2b, 0xf0, 0x84, 0xed, 0xea, 0x79, 0x29, 0x86, 0x0b, 0xb2, 0xd2, 0x65,
+	0xd0, 0x2a, 0x5e, 0xe5, 0xd2, 0xff, 0xee, 0xb6, 0x55, 0x7c, 0x5a, 0x71, 0xd2, 0xeb, 0x97, 0x98,
+	0x13, 0x39, 0x03, 0x27, 0x5b, 0x0d, 0xf3, 0x2c, 0x1f, 0xfc, 0x93, 0xf3, 0x97, 0x4a, 0x1a, 0x45,
+	0x91, 0xf7, 0xfb, 0x28, 0x12, 0x95, 0x60, 0xda, 0x42, 0xce, 0xaa, 0x7b, 0xdc, 0x3d, 0x4f, 0x89,
+	0x11, 0x0b, 0x39, 0x11, 0x2b, 0x1d, 0x53, 0xf9, 0xe7, 0x14, 0xb3, 0xce, 0xb3, 0x7d, 0x02, 0x50,
+	0xe0, 0x00, 0x35, 0xa4, 0x1f, 0x55, 0xb2, 0x9b, 0x70, 0xc2, 0x4d, 0x16, 0x97, 0x4a, 0x8a, 0x77,
+	0xca, 0x42, 0x8e, 0x7a, 0x40, 0xad, 0x63, 0xc6, 0x59, 0x6f, 0x96, 0x1f, 0x88, 0x10, 0x26, 0x2c,
+	0x7c, 0x3c, 0x09, 0x07, 0x54, 0x6a, 0x08, 0x8f, 0x01, 0x14, 0xda, 0x5c, 0x6b, 0x85, 0xae, 0xfd,
+	0xd3, 0xf6, 0x16, 0x11, 0x8b, 0xfd, 0x73, 0xf8, 0xac, 0x79, 0x09, 0xe0, 0x54, 0xa7, 0x6b, 0x67,
+	0x29, 0x49, 0xb7, 0x03, 0x51, 0xbc, 0xfa, 0x8f, 0x44, 0xee, 0xea, 0x15, 0x80, 0x33, 0xdd, 0x66,
+	0xf6, 0xe5, 0x5e, 0x0b, 0xb4, 0x21, 0x8b, 0xe5, 0x43, 0x90, 0xb9, 0xc3, 0x87, 0x00, 0x8e, 0xc5,
+	0x67, 0x67, 0x3e, 0x49, 0x3a, 0x46, 0x11, 0x2f, 0xf5, 0x4d, 0xe1, 0x1e, 0x08, 0x1c, 0x8e, 0x0e,
+	0xb4, 0xf3, 0x49, 0x4a, 0x11, 0xb0, 0xb8, 0xd8, 0x07, 0xb8, 0x25, 0x74, 0x7c, 0xec, 0xe4, 0x7b,
+	0x93, 0x8a, 0x50, 0x92, 0x43, 0x77, 0x9c, 0x10, 0xc2, 0x03, 0x38, 0x7a, 0x70, 0x3a, 0xe4, 0x7a,
+	0x53, 0xe3, 0x04, 0x71, 0xa9, 0x4f, 0x42, 0x58, 0xbc, 0x74, 0xeb, 0x75, 0x53, 0x02, 0x3b, 0x4d,
+	0x09, 0xec, 0x36, 0x25, 0xf0, 0xab, 0x29, 0x81, 0x17, 0x7b, 0x52, 0x6a, 0x77, 0x4f, 0x4a, 0x7d,
+	0xdf, 0x93, 0x52, 0xf7, 0xf2, 0x5d, 0xaf, 0xc1, 0xcd, 0xd6, 0x0f, 0x65, 0xef, 0x56, 0xac, 0x0e,
+	0x7a, 0x9f, 0xb9, 0x8b, 0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x79, 0xd6, 0xbc, 0x02, 0xc5, 0x0b,
+	0x00, 0x00,
 }
 
 func (this *MsgSetWithdrawAddressResponse) Equal(that interface{}) bool {
@@ -515,6 +804,150 @@ func (this *MsgFundCommunityPoolResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *MsgChangeRatio) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MsgChangeRatio)
+	if !ok {
+		that2, ok := that.(MsgChangeRatio)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ModeratorAddress != that1.ModeratorAddress {
+		return false
+	}
+	if !this.Ratio.Equal(&that1.Ratio) {
+		return false
+	}
+	return true
+}
+func (this *MsgChangeRatioResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MsgChangeRatioResponse)
+	if !ok {
+		that2, ok := that.(MsgChangeRatioResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	return true
+}
+func (this *MsgChangeBaseAddress) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MsgChangeBaseAddress)
+	if !ok {
+		that2, ok := that.(MsgChangeBaseAddress)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ModeratorAddress != that1.ModeratorAddress {
+		return false
+	}
+	if this.NewBaseAddress != that1.NewBaseAddress {
+		return false
+	}
+	return true
+}
+func (this *MsgChangeBaseAddressResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MsgChangeBaseAddressResponse)
+	if !ok {
+		that2, ok := that.(MsgChangeBaseAddressResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	return true
+}
+func (this *MsgChangeModerator) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MsgChangeModerator)
+	if !ok {
+		that2, ok := that.(MsgChangeModerator)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ModeratorAddress != that1.ModeratorAddress {
+		return false
+	}
+	if this.NewModeratorAddress != that1.NewModeratorAddress {
+		return false
+	}
+	return true
+}
+func (this *MsgChangeModeratorResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MsgChangeModeratorResponse)
+	if !ok {
+		that2, ok := that.(MsgChangeModeratorResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	return true
+}
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
@@ -540,6 +973,12 @@ type MsgClient interface {
 	// FundCommunityPool defines a method to allow an account to directly
 	// fund the community pool.
 	FundCommunityPool(ctx context.Context, in *MsgFundCommunityPool, opts ...grpc.CallOption) (*MsgFundCommunityPoolResponse, error)
+	// ChangeRatio defines a mthod to allow change the fee distribution ratio
+	ChangeRatio(ctx context.Context, in *MsgChangeRatio, opts ...grpc.CallOption) (*MsgChangeRatioResponse, error)
+	// ChangeBaseAddress defines a method to allow changing the base address
+	ChangeBaseAddress(ctx context.Context, in *MsgChangeBaseAddress, opts ...grpc.CallOption) (*MsgChangeBaseAddressResponse, error)
+	// ChangeModerator defines a method to allow changing the moderator
+	ChangeModerator(ctx context.Context, in *MsgChangeModerator, opts ...grpc.CallOption) (*MsgChangeModeratorResponse, error)
 }
 
 type msgClient struct {
@@ -586,6 +1025,33 @@ func (c *msgClient) FundCommunityPool(ctx context.Context, in *MsgFundCommunityP
 	return out, nil
 }
 
+func (c *msgClient) ChangeRatio(ctx context.Context, in *MsgChangeRatio, opts ...grpc.CallOption) (*MsgChangeRatioResponse, error) {
+	out := new(MsgChangeRatioResponse)
+	err := c.cc.Invoke(ctx, "/cosmos.distribution.v1beta1.Msg/ChangeRatio", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ChangeBaseAddress(ctx context.Context, in *MsgChangeBaseAddress, opts ...grpc.CallOption) (*MsgChangeBaseAddressResponse, error) {
+	out := new(MsgChangeBaseAddressResponse)
+	err := c.cc.Invoke(ctx, "/cosmos.distribution.v1beta1.Msg/ChangeBaseAddress", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ChangeModerator(ctx context.Context, in *MsgChangeModerator, opts ...grpc.CallOption) (*MsgChangeModeratorResponse, error) {
+	out := new(MsgChangeModeratorResponse)
+	err := c.cc.Invoke(ctx, "/cosmos.distribution.v1beta1.Msg/ChangeModerator", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// SetWithdrawAddress defines a method to change the withdraw address
@@ -600,6 +1066,12 @@ type MsgServer interface {
 	// FundCommunityPool defines a method to allow an account to directly
 	// fund the community pool.
 	FundCommunityPool(context.Context, *MsgFundCommunityPool) (*MsgFundCommunityPoolResponse, error)
+	// ChangeRatio defines a mthod to allow change the fee distribution ratio
+	ChangeRatio(context.Context, *MsgChangeRatio) (*MsgChangeRatioResponse, error)
+	// ChangeBaseAddress defines a method to allow changing the base address
+	ChangeBaseAddress(context.Context, *MsgChangeBaseAddress) (*MsgChangeBaseAddressResponse, error)
+	// ChangeModerator defines a method to allow changing the moderator
+	ChangeModerator(context.Context, *MsgChangeModerator) (*MsgChangeModeratorResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -617,6 +1089,15 @@ func (*UnimplementedMsgServer) WithdrawValidatorCommission(ctx context.Context, 
 }
 func (*UnimplementedMsgServer) FundCommunityPool(ctx context.Context, req *MsgFundCommunityPool) (*MsgFundCommunityPoolResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FundCommunityPool not implemented")
+}
+func (*UnimplementedMsgServer) ChangeRatio(ctx context.Context, req *MsgChangeRatio) (*MsgChangeRatioResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeRatio not implemented")
+}
+func (*UnimplementedMsgServer) ChangeBaseAddress(ctx context.Context, req *MsgChangeBaseAddress) (*MsgChangeBaseAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeBaseAddress not implemented")
+}
+func (*UnimplementedMsgServer) ChangeModerator(ctx context.Context, req *MsgChangeModerator) (*MsgChangeModeratorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeModerator not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -695,6 +1176,60 @@ func _Msg_FundCommunityPool_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ChangeRatio_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgChangeRatio)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ChangeRatio(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cosmos.distribution.v1beta1.Msg/ChangeRatio",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ChangeRatio(ctx, req.(*MsgChangeRatio))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ChangeBaseAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgChangeBaseAddress)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ChangeBaseAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cosmos.distribution.v1beta1.Msg/ChangeBaseAddress",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ChangeBaseAddress(ctx, req.(*MsgChangeBaseAddress))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ChangeModerator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgChangeModerator)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ChangeModerator(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cosmos.distribution.v1beta1.Msg/ChangeModerator",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ChangeModerator(ctx, req.(*MsgChangeModerator))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "cosmos.distribution.v1beta1.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -714,6 +1249,18 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FundCommunityPool",
 			Handler:    _Msg_FundCommunityPool_Handler,
+		},
+		{
+			MethodName: "ChangeRatio",
+			Handler:    _Msg_ChangeRatio_Handler,
+		},
+		{
+			MethodName: "ChangeBaseAddress",
+			Handler:    _Msg_ChangeBaseAddress_Handler,
+		},
+		{
+			MethodName: "ChangeModerator",
+			Handler:    _Msg_ChangeModerator_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -988,6 +1535,189 @@ func (m *MsgFundCommunityPoolResponse) MarshalToSizedBuffer(dAtA []byte) (int, e
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgChangeRatio) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgChangeRatio) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgChangeRatio) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Ratio.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	if len(m.ModeratorAddress) > 0 {
+		i -= len(m.ModeratorAddress)
+		copy(dAtA[i:], m.ModeratorAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ModeratorAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgChangeRatioResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgChangeRatioResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgChangeRatioResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgChangeBaseAddress) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgChangeBaseAddress) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgChangeBaseAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.NewBaseAddress) > 0 {
+		i -= len(m.NewBaseAddress)
+		copy(dAtA[i:], m.NewBaseAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.NewBaseAddress)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ModeratorAddress) > 0 {
+		i -= len(m.ModeratorAddress)
+		copy(dAtA[i:], m.ModeratorAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ModeratorAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgChangeBaseAddressResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgChangeBaseAddressResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgChangeBaseAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgChangeModerator) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgChangeModerator) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgChangeModerator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.NewModeratorAddress) > 0 {
+		i -= len(m.NewModeratorAddress)
+		copy(dAtA[i:], m.NewModeratorAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.NewModeratorAddress)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ModeratorAddress) > 0 {
+		i -= len(m.ModeratorAddress)
+		copy(dAtA[i:], m.ModeratorAddress)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ModeratorAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgChangeModeratorResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgChangeModeratorResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgChangeModeratorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -1105,6 +1835,82 @@ func (m *MsgFundCommunityPool) Size() (n int) {
 }
 
 func (m *MsgFundCommunityPoolResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgChangeRatio) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ModeratorAddress)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = m.Ratio.Size()
+	n += 1 + l + sovTx(uint64(l))
+	return n
+}
+
+func (m *MsgChangeRatioResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgChangeBaseAddress) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ModeratorAddress)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.NewBaseAddress)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgChangeBaseAddressResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgChangeModerator) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ModeratorAddress)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.NewModeratorAddress)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgChangeModeratorResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1790,6 +2596,499 @@ func (m *MsgFundCommunityPoolResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgFundCommunityPoolResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgChangeRatio) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgChangeRatio: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgChangeRatio: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ModeratorAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ModeratorAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ratio", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Ratio.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgChangeRatioResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgChangeRatioResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgChangeRatioResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgChangeBaseAddress) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgChangeBaseAddress: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgChangeBaseAddress: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ModeratorAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ModeratorAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NewBaseAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NewBaseAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgChangeBaseAddressResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgChangeBaseAddressResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgChangeBaseAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgChangeModerator) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgChangeModerator: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgChangeModerator: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ModeratorAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ModeratorAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NewModeratorAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NewModeratorAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgChangeModeratorResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgChangeModeratorResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgChangeModeratorResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
