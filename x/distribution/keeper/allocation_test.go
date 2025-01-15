@@ -83,7 +83,7 @@ func TestAllocateTokensToManyValidators(t *testing.T) {
 	require.True(t, app.DistrKeeper.GetValidatorCurrentRewards(ctx, valAddrs[1]).Rewards.IsZero())
 
 	// allocate tokens as if both had voted and second was proposer
-	fees := sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(100)))
+	fees := sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(298)))
 	feeCollector := app.AccountKeeper.GetModuleAccount(ctx, types.FeeCollectorName)
 	require.NotNil(t, feeCollector)
 

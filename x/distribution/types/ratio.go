@@ -10,9 +10,9 @@ import (
 // zero fee pool
 func InitialRatio() Ratio {
 	return Ratio{
-		StakingRewards: sdk.NewDecWithPrec(34, 2), // 34%
-		Base:           sdk.NewDecWithPrec(33, 2), // 33%
-		Burn:           sdk.NewDecWithPrec(33, 2), // 33%
+		StakingRewards: sdk.NewDecWithPrec(333333333333333334, 18), // 1/3
+		Base:           sdk.NewDecWithPrec(333333333333333333, 18), // 1/3
+		Burn:           sdk.NewDecWithPrec(333333333333333333, 18), // 1/3
 	}
 }
 

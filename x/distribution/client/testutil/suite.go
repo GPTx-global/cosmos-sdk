@@ -177,7 +177,7 @@ func (s *IntegrationTestSuite) TestGetCmdQueryValidatorOutstandingRewards() {
 				fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 			},
 			false,
-			`{"rewards":[{"denom":"stake","amount":"232.260000000000000000"}]}`,
+			`{"rewards":[{"denom":"stake","amount":"79.380000000000000000"}]}`,
 		},
 		{
 			"text output",
@@ -188,7 +188,7 @@ func (s *IntegrationTestSuite) TestGetCmdQueryValidatorOutstandingRewards() {
 			},
 			false,
 			`rewards:
-- amount: "232.260000000000000000"
+- amount: "79.380000000000000000"
   denom: stake`,
 		},
 	}
@@ -240,7 +240,7 @@ func (s *IntegrationTestSuite) TestGetCmdQueryValidatorCommission() {
 				fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 			},
 			false,
-			`{"commission":[{"denom":"stake","amount":"116.130000000000000000"}]}`,
+			`{"commission":[{"denom":"stake","amount":"39.690000000000000000"}]}`,
 		},
 		{
 			"text output",
@@ -251,7 +251,7 @@ func (s *IntegrationTestSuite) TestGetCmdQueryValidatorCommission() {
 			},
 			false,
 			`commission:
-- amount: "116.130000000000000000"
+- amount: "39.690000000000000000"
   denom: stake`,
 		},
 	}
@@ -393,7 +393,7 @@ func (s *IntegrationTestSuite) TestGetCmdQueryDelegatorRewards() {
 				fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 			},
 			false,
-			fmt.Sprintf(`{"rewards":[{"validator_address":"%s","reward":[{"denom":"stake","amount":"193.550000000000000000"}]}],"total":[{"denom":"stake","amount":"193.550000000000000000"}]}`, valAddr.String()),
+			fmt.Sprintf(`{"rewards":[{"validator_address":"%s","reward":[{"denom":"stake","amount":"66.150000000000000000"}]}],"total":[{"denom":"stake","amount":"66.150000000000000000"}]}`, valAddr.String()),
 		},
 		{
 			"json output (specific validator)",
@@ -403,7 +403,7 @@ func (s *IntegrationTestSuite) TestGetCmdQueryDelegatorRewards() {
 				fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 			},
 			false,
-			`{"rewards":[{"denom":"stake","amount":"193.550000000000000000"}]}`,
+			`{"rewards":[{"denom":"stake","amount":"66.150000000000000000"}]}`,
 		},
 		{
 			"text output",
@@ -415,11 +415,11 @@ func (s *IntegrationTestSuite) TestGetCmdQueryDelegatorRewards() {
 			false,
 			fmt.Sprintf(`rewards:
 - reward:
-  - amount: "193.550000000000000000"
+  - amount: "66.150000000000000000"
     denom: stake
   validator_address: %s
 total:
-- amount: "193.550000000000000000"
+- amount: "66.150000000000000000"
   denom: stake`, valAddr.String()),
 		},
 		{
@@ -431,7 +431,7 @@ total:
 			},
 			false,
 			`rewards:
-- amount: "193.550000000000000000"
+- amount: "66.150000000000000000"
   denom: stake`,
 		},
 	}
@@ -468,13 +468,13 @@ func (s *IntegrationTestSuite) TestGetCmdQueryCommunityPool() {
 		{
 			"json output",
 			[]string{fmt.Sprintf("--%s=3", flags.FlagHeight), fmt.Sprintf("--%s=json", tmcli.OutputFlag)},
-			`{"pool":[{"denom":"stake","amount":"4.740000000000000000"}]}`,
+			`{"pool":[{"denom":"stake","amount":"1.620000000000000000"}]}`,
 		},
 		{
 			"text output",
 			[]string{fmt.Sprintf("--%s=text", tmcli.OutputFlag), fmt.Sprintf("--%s=3", flags.FlagHeight)},
 			`pool:
-- amount: "4.740000000000000000"
+- amount: "1.620000000000000000"
   denom: stake`,
 		},
 	}
