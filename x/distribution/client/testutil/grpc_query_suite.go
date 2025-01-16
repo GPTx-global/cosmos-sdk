@@ -503,3 +503,96 @@ func (s *GRPCQueryTestSuite) TestQueryValidatorCommunityPoolGRPC() {
 		})
 	}
 }
+
+func (s *GRPCQueryTestSuite) TestQueryRatioGRPC() {
+	val := s.network.Validators[0]
+	baseURL := val.APIAddress
+
+	testCases := []struct {
+		name     string
+		url      string
+		respType proto.Message
+		expected proto.Message
+	}{
+		{
+			"gRPC request ratio",
+			fmt.Sprintf("%s/cosmos/distribution/v1beta1/ratio", baseURL),
+			&types.QueryRatioResponse{},
+			&types.QueryRatioResponse{
+				Ratio: types.DefaultGenesisState().Ratio,
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		resp, err := rest.GetRequest(tc.url)
+		s.Run(tc.name, func() {
+			s.Require().NoError(err)
+			s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(resp, tc.respType))
+			s.Require().Equal(tc.expected, tc.respType)
+		})
+	}
+}
+
+func (s *GRPCQueryTestSuite) TestQueryModeratorGRPC() {
+	val := s.network.Validators[0]
+	baseURL := val.APIAddress
+
+	testCases := []struct {
+		name     string
+		url      string
+		respType proto.Message
+		expected proto.Message
+	}{
+		{
+			"gRPC request moderator",
+			fmt.Sprintf("%s/cosmos/distribution/v1beta1/moderator_address", baseURL),
+			&types.QueryModeratorResponse{},
+			&types.QueryModeratorResponse{
+				ModeratorAddress: val.Address.String(),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		resp, err := rest.GetRequest(tc.url)
+		s.Run(tc.name, func() {
+			s.Require().NoError(err)
+			s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(resp, tc.respType))
+			s.Require().Equal(tc.expected, tc.respType)
+		})
+	}
+}
+
+func (s *GRPCQueryTestSuite) TestQueryBaseAddressGRPC() {
+	val := s.network.Validators[0]
+	baseURL := val.APIAddress
+
+	testCases := []struct {
+		name     string
+		url      string
+		respType proto.Message
+		expected proto.Message
+	}{
+		{
+			"gRPC request base address",
+			fmt.Sprintf("%s/cosmos/distribution/v1beta1/base_address", baseURL),
+			&types.QueryBaseAddressResponse{},
+			&types.QueryBaseAddressResponse{
+				BaseAddress: val.Address.String(),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		resp, err := rest.GetRequest(tc.url)
+		s.Run(tc.name, func() {
+			s.Require().NoError(err)
+			s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(resp, tc.respType))
+			s.Require().Equal(tc.expected, tc.respType)
+		})
+	}
+}

@@ -173,8 +173,12 @@ func initGenFiles(cfg Config, genAccounts []authtypes.GenesisAccount, genBalance
 	}
 	var distrGenState distrtypes.GenesisState
 	cfg.Codec.MustUnmarshalJSON(cfg.GenesisState[distrtypes.ModuleName], &distrGenState)
-	distrGenState.ModeratorAddress = addrStr
-	distrGenState.BaseAddress = addrStr
+	if distrGenState.ModeratorAddress == "" {
+		distrGenState.ModeratorAddress = addrStr
+	}
+	if distrGenState.BaseAddress == "" {
+		distrGenState.BaseAddress = addrStr
+	}
 	cfg.GenesisState[distrtypes.ModuleName] = cfg.Codec.MustMarshalJSON(&distrGenState)
 
 	// set the balances in the genesis state

@@ -212,8 +212,12 @@ func genesisStateWithValSet(t *testing.T,
 		addrStr = genAccs[0].GetAddress().String()
 	}
 	distrGenesis := distrtypes.DefaultGenesisState()
-	distrGenesis.ModeratorAddress = addrStr
-	distrGenesis.BaseAddress = addrStr
+	if distrGenesis.ModeratorAddress == "" {
+		distrGenesis.ModeratorAddress = addrStr
+	}
+	if distrGenesis.BaseAddress == "" {
+		distrGenesis.BaseAddress = addrStr
+	}
 	genesisState[distrtypes.ModuleName] = app.AppCodec().MustMarshalJSON(distrGenesis)
 
 	return genesisState
