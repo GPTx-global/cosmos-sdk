@@ -550,7 +550,7 @@ func (s *GRPCQueryTestSuite) TestQueryModeratorGRPC() {
 			fmt.Sprintf("%s/cosmos/distribution/v1beta1/moderator_address", baseURL),
 			&types.QueryModeratorResponse{},
 			&types.QueryModeratorResponse{
-				ModeratorAddress: val.Address.String(),
+				ModeratorAddress: "cosmos1hd6fsrvnz6qkp87s3u86ludegq97agxsdkwzyh",
 			},
 		},
 	}
@@ -581,7 +581,7 @@ func (s *GRPCQueryTestSuite) TestQueryBaseAddressGRPC() {
 			fmt.Sprintf("%s/cosmos/distribution/v1beta1/base_address", baseURL),
 			&types.QueryBaseAddressResponse{},
 			&types.QueryBaseAddressResponse{
-				BaseAddress: val.Address.String(),
+				BaseAddress: "cosmos1hd6fsrvnz6qkp87s3u86ludegq97agxsdkwzyh",
 			},
 		},
 	}

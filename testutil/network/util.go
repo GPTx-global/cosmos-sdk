@@ -168,9 +168,9 @@ func initGenFiles(cfg Config, genAccounts []authtypes.GenesisAccount, genBalance
 
 	// set distribution module gen state
 	addrStr := "cosmos1hd6fsrvnz6qkp87s3u86ludegq97agxsdkwzyh"
-	if len(genAccounts) > 0 {
-		addrStr = genAccounts[0].GetAddress().String()
-	}
+	// if len(genAccounts) > 0 {
+	// 	addrStr = genAccounts[0].GetAddress().String()
+	// }
 	var distrGenState distrtypes.GenesisState
 	cfg.Codec.MustUnmarshalJSON(cfg.GenesisState[distrtypes.ModuleName], &distrGenState)
 	if distrGenState.ModeratorAddress == "" {

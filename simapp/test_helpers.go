@@ -208,9 +208,9 @@ func genesisStateWithValSet(t *testing.T,
 
 	// update distribution moderator and base address
 	addrStr := "cosmos1hd6fsrvnz6qkp87s3u86ludegq97agxsdkwzyh"
-	if len(genAccs) > 0 {
-		addrStr = genAccs[0].GetAddress().String()
-	}
+	// if len(genAccs) > 0 {
+	// 	addrStr = genAccs[0].GetAddress().String()
+	// }
 	distrGenesis := distrtypes.DefaultGenesisState()
 	if distrGenesis.ModeratorAddress == "" {
 		distrGenesis.ModeratorAddress = addrStr

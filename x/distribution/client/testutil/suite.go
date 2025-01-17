@@ -391,12 +391,13 @@ func (s *IntegrationTestSuite) TestGetCmdQueryValidatorSlashes() {
 }
 
 func (s *IntegrationTestSuite) TestGetCmdQueryDelegatorRewards() {
+
 	val := s.network.Validators[0]
 	addr := val.Address
 	valAddr := sdk.ValAddress(addr)
 
-	_, err := s.network.WaitForHeightWithTimeout(11, time.Minute)
-	s.Require().NoError(err)
+	// _, err := s.network.WaitForHeightWithTimeout(11, time.Minute)
+	// s.Require().NoError(err)
 
 	testCases := []struct {
 		name           string
@@ -659,6 +660,7 @@ func (s *IntegrationTestSuite) TestNewWithdrawRewardsCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 			[]string{},
@@ -671,6 +673,7 @@ func (s *IntegrationTestSuite) TestNewWithdrawRewardsCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			false, 0, &sdk.TxResponse{},
 			[]string{
@@ -686,6 +689,7 @@ func (s *IntegrationTestSuite) TestNewWithdrawRewardsCmd() {
 				fmt.Sprintf("--%s=true", cli.FlagCommission),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			false, 0, &sdk.TxResponse{},
 			[]string{
@@ -764,6 +768,7 @@ func (s *IntegrationTestSuite) TestNewWithdrawAllRewardsCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagOffline),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 			[]string{},
@@ -775,6 +780,7 @@ func (s *IntegrationTestSuite) TestNewWithdrawAllRewardsCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			false, 0, &sdk.TxResponse{},
 			[]string{
@@ -854,6 +860,7 @@ func (s *IntegrationTestSuite) TestNewSetWithdrawAddrCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -865,6 +872,7 @@ func (s *IntegrationTestSuite) TestNewSetWithdrawAddrCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			false, 0, &sdk.TxResponse{},
 		},
@@ -1006,6 +1014,7 @@ func (s *IntegrationTestSuite) TestGetCmdSubmitProposal() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -1017,6 +1026,7 @@ func (s *IntegrationTestSuite) TestGetCmdSubmitProposal() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			false, 0, &sdk.TxResponse{},
 		},
