@@ -68,83 +68,82 @@ func (k Keeper) AllocateTokens(
 		logger.Info("Event Emitted", "type", types.EventTypeBaseFee, "key", sdk.AttributeKeyAmount, "value", baseFee.String())
 
 		feesCollectedInt = feesCollectedInt.Sub(burnFee...).Sub(baseFee...)
-	}
 
-	feesCollected := sdk.NewDecCoinsFromCoins(feesCollectedInt...)
-	logger.Info("Staking Rewards", "key", sdk.AttributeKeyAmount, "value", feesCollected.String())
+		feesCollected := sdk.NewDecCoinsFromCoins(feesCollectedInt...)
+		logger.Info("Event Emitted", "type", types.EventTypeStakingRewards, "key", sdk.AttributeKeyAmount, "value", feesCollectedInt.String())
 
-	// temporary workaround to keep CanWithdrawInvariant happy
-	// general discussions here: https://github.com/cosmos/cosmos-sdk/issues/2906#issuecomment-441867634
-	feePool := k.GetFeePool(ctx)
-	if totalPreviousPower == 0 {
-		feePool.CommunityPool = feePool.CommunityPool.Add(feesCollected...)
-		k.SetFeePool(ctx, feePool)
-		return
-	}
+		// temporary workaround to keep CanWithdrawInvariant happy
+		// general discussions here: https://github.com/cosmos/cosmos-sdk/issues/2906#issuecomment-441867634
+		feePool := k.GetFeePool(ctx)
+		if totalPreviousPower == 0 {
+			feePool.CommunityPool = feePool.CommunityPool.Add(feesCollected...)
+			k.SetFeePool(ctx, feePool)
+			return
+		}
 
-	// calculate fraction votes
-	previousFractionVotes := sdk.NewDec(sumPreviousPrecommitPower).Quo(sdk.NewDec(totalPreviousPower))
+		// calculate fraction votes
+		previousFractionVotes := sdk.NewDec(sumPreviousPrecommitPower).Quo(sdk.NewDec(totalPreviousPower))
 
-	// calculate previous proposer reward
-	baseProposerReward := k.GetBaseProposerReward(ctx)
-	bonusProposerReward := k.GetBonusProposerReward(ctx)
-	proposerMultiplier := baseProposerReward.Add(bonusProposerReward.MulTruncate(previousFractionVotes))
-	proposerReward := feesCollected.MulDecTruncate(proposerMultiplier)
+		// calculate previous proposer reward
+		baseProposerReward := k.GetBaseProposerReward(ctx)
+		bonusProposerReward := k.GetBonusProposerReward(ctx)
+		proposerMultiplier := baseProposerReward.Add(bonusProposerReward.MulTruncate(previousFractionVotes))
+		proposerReward := feesCollected.MulDecTruncate(proposerMultiplier)
 
-	// pay previous proposer
-	remaining := feesCollected
-	proposerValidator := k.stakingKeeper.ValidatorByConsAddr(ctx, previousProposer)
+		// pay previous proposer
+		remaining := feesCollected
+		proposerValidator := k.stakingKeeper.ValidatorByConsAddr(ctx, previousProposer)
 
-	if proposerValidator != nil {
-		ctx.EventManager().EmitEvent(
-			sdk.NewEvent(
-				types.EventTypeProposerReward,
-				sdk.NewAttribute(sdk.AttributeKeyAmount, proposerReward.String()),
-				sdk.NewAttribute(types.AttributeKeyValidator, proposerValidator.GetOperator().String()),
-			),
-		)
-		k.AllocateTokensToValidator(ctx, proposerValidator, proposerReward)
-		remaining = remaining.Sub(proposerReward)
-	} else {
-		// previous proposer can be unknown if say, the unbonding period is 1 block, so
-		// e.g. a validator undelegates at block X, it's removed entirely by
-		// block X+1's endblock, then X+2 we need to refer to the previous
-		// proposer for X+1, but we've forgotten about them.
-		logger.Error(fmt.Sprintf(
-			"WARNING: Attempt to allocate proposer rewards to unknown proposer %s. "+
-				"This should happen only if the proposer unbonded completely within a single block, "+
-				"which generally should not happen except in exceptional circumstances (or fuzz testing). "+
-				"We recommend you investigate immediately.",
-			previousProposer.String()))
-	}
+		if proposerValidator != nil {
+			ctx.EventManager().EmitEvent(
+				sdk.NewEvent(
+					types.EventTypeProposerReward,
+					sdk.NewAttribute(sdk.AttributeKeyAmount, proposerReward.String()),
+					sdk.NewAttribute(types.AttributeKeyValidator, proposerValidator.GetOperator().String()),
+				),
+			)
+			k.AllocateTokensToValidator(ctx, proposerValidator, proposerReward)
+			remaining = remaining.Sub(proposerReward)
+		} else {
+			// previous proposer can be unknown if say, the unbonding period is 1 block, so
+			// e.g. a validator undelegates at block X, it's removed entirely by
+			// block X+1's endblock, then X+2 we need to refer to the previous
+			// proposer for X+1, but we've forgotten about them.
+			logger.Error(fmt.Sprintf(
+				"WARNING: Attempt to allocate proposer rewards to unknown proposer %s. "+
+					"This should happen only if the proposer unbonded completely within a single block, "+
+					"which generally should not happen except in exceptional circumstances (or fuzz testing). "+
+					"We recommend you investigate immediately.",
+				previousProposer.String()))
+		}
 
-	// calculate fraction allocated to validators
-	communityTax := k.GetCommunityTax(ctx)
-	voteMultiplier := sdk.OneDec().Sub(proposerMultiplier).Sub(communityTax)
-	feeMultiplier := feesCollected.MulDecTruncate(voteMultiplier)
+		// calculate fraction allocated to validators
+		communityTax := k.GetCommunityTax(ctx)
+		voteMultiplier := sdk.OneDec().Sub(proposerMultiplier).Sub(communityTax)
+		feeMultiplier := feesCollected.MulDecTruncate(voteMultiplier)
 
-	// allocate tokens proportionally to voting power
-	//
-	// TODO: Consider parallelizing later
-	//
-	// Ref: https://github.com/cosmos/cosmos-sdk/pull/3099#discussion_r246276376
-	for _, vote := range bondedVotes {
-		validator := k.stakingKeeper.ValidatorByConsAddr(ctx, vote.Validator.Address)
-
-		// TODO: Consider micro-slashing for missing votes.
+		// allocate tokens proportionally to voting power
 		//
-		// Ref: https://github.com/cosmos/cosmos-sdk/issues/2525#issuecomment-430838701
-		powerFraction := sdk.NewDec(vote.Validator.Power).QuoTruncate(sdk.NewDec(totalPreviousPower))
-		reward := feeMultiplier.MulDecTruncate(powerFraction)
+		// TODO: Consider parallelizing later
+		//
+		// Ref: https://github.com/cosmos/cosmos-sdk/pull/3099#discussion_r246276376
+		for _, vote := range bondedVotes {
+			validator := k.stakingKeeper.ValidatorByConsAddr(ctx, vote.Validator.Address)
 
-		k.AllocateTokensToValidator(ctx, validator, reward)
-		remaining = remaining.Sub(reward)
+			// TODO: Consider micro-slashing for missing votes.
+			//
+			// Ref: https://github.com/cosmos/cosmos-sdk/issues/2525#issuecomment-430838701
+			powerFraction := sdk.NewDec(vote.Validator.Power).QuoTruncate(sdk.NewDec(totalPreviousPower))
+			reward := feeMultiplier.MulDecTruncate(powerFraction)
+
+			k.AllocateTokensToValidator(ctx, validator, reward)
+			remaining = remaining.Sub(reward)
+		}
+
+		// allocate community funding
+		feePool.CommunityPool = feePool.CommunityPool.Add(remaining...)
+		k.SetFeePool(ctx, feePool)
 	}
-
-	// allocate community funding
-	feePool.CommunityPool = feePool.CommunityPool.Add(remaining...)
-	k.SetFeePool(ctx, feePool)
-	logger.Info("Community Pool", "key", sdk.AttributeKeyAmount, "value", remaining.String())
 }
 
 // AllocateTokensToValidator allocate tokens to a particular validator,
@@ -153,7 +152,6 @@ func (k Keeper) AllocateTokensToValidator(ctx sdk.Context, val stakingtypes.Vali
 	// split tokens between validator and delegators according to commission
 	commission := tokens.MulDec(val.GetCommission())
 	shared := tokens.Sub(commission)
-	logger := k.Logger(ctx)
 
 	// update current commission
 	ctx.EventManager().EmitEvent(
@@ -181,8 +179,6 @@ func (k Keeper) AllocateTokensToValidator(ctx sdk.Context, val stakingtypes.Vali
 			sdk.NewAttribute(types.AttributeKeyValidator, val.GetOperator().String()),
 		),
 	)
-	logger.Info("Event Emitted", "type", types.EventTypeRewards, "key", sdk.AttributeKeyAmount, "value", tokens.String())
-	logger.Info("Event Emitted", "type", types.EventTypeRewards, "key", types.AttributeKeyValidator, "value", val.GetOperator().String())
 
 	outstanding := k.GetValidatorOutstandingRewards(ctx, val.GetOperator())
 	outstanding.Rewards = outstanding.Rewards.Add(tokens...)

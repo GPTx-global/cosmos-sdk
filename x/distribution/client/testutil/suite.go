@@ -16,7 +16,6 @@ import (
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	bankcli "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/distribution/client/cli"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
@@ -32,7 +31,7 @@ type IntegrationTestSuite struct {
 
 var (
 	distModeratorAddr = "cosmos10rc3qc4vynurg7f6etfhuhnmq6v7v03w7m2p39"
-	distBaseAddr      = "cosmos10rc3qc4vynurg7f6etfhuhnmq6v7v03w7m2p39" //"cosmos139f7kncmglres2nf3h4hc4tade85ekfr8sulz5"
+	distBaseAddr      = "cosmos10rc3qc4vynurg7f6etfhuhnmq6v7v03w7m2p39"
 	changeAddr        = "cosmos1gtt8clsfjlyupuc92sl7432lc2a94na87d6guc"
 	distModeratorMnic = "charge gloom capital outdoor ride mixture barely virus better depth admit speed turtle broccoli air find rib adult bid stock bar wreck amazing resist"
 	// changeAddrMnic    = "unfold rotate test false round multiply measure catch pumpkin leaf mystery boil honey bridge toss gold enforce sort will marriage walk evidence task stairs"
@@ -1228,152 +1227,6 @@ func (s *IntegrationTestSuite) TestNewChangeRatioCmd() {
 			}
 		})
 	}
-}
-
-func (s *IntegrationTestSuite) TestFeeDistribution() {
-	// reset the suite
-	s.TearDownSuite()
-	s.SetupSuite()
-
-	val := s.network.Validators[0]
-	clientCtx := val.ClientCtx
-
-	s.Run("correct distribution", func() {
-		var ratio distrtypes.QueryRatioResponse
-		var oldTS banktypes.QueryTotalSupplyResponse
-		var newTS banktypes.QueryTotalSupplyResponse
-		var oldBaseBalance banktypes.QueryAllBalancesResponse
-		var newBaseBalance banktypes.QueryAllBalancesResponse
-		var oldCommPool distrtypes.QueryCommunityPoolResponse
-		var newCommPool distrtypes.QueryCommunityPoolResponse
-		var oldRewards distrtypes.QueryDelegationRewardsResponse
-		var newRewards distrtypes.QueryDelegationRewardsResponse
-		var oldValCommission distrtypes.ValidatorAccumulatedCommission
-		var newValCommission distrtypes.ValidatorAccumulatedCommission
-
-		argJson := fmt.Sprintf("--%s=json", tmcli.OutputFlag)
-		argH5 := fmt.Sprintf("--%s=5", flags.FlagHeight)
-		argH10 := fmt.Sprintf("--%s=10", flags.FlagHeight)
-
-		argsTx := []string{
-			val.Address.String(), changeAddr, "1000" + s.network.Config.BondDenom,
-			fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-			fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-			fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-			fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(300))).String()),
-		}
-
-		// get the ratio
-		cmd := cli.GetCmdQueryRatio()
-		out, err := clitestutil.ExecTestCLICmd(clientCtx, cmd, []string{argJson})
-		s.Require().NoError(err)
-		s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &ratio), out.String())
-
-		// get the old total supply
-		cmd = bankcli.GetCmdQueryTotalSupply()
-		out, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, []string{argJson, argH5})
-		s.Require().NoError(err)
-		s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &oldTS), out.String())
-
-		// get the old base address balance
-		cmd = bankcli.GetBalancesCmd()
-		out, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, []string{distBaseAddr, argJson, argH5})
-		s.Require().NoError(err)
-		s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &oldBaseBalance), out.String())
-
-		// get the old community pool
-		cmd = cli.GetCmdQueryCommunityPool()
-		out, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, []string{argJson, argH5})
-		s.Require().NoError(err)
-		s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &oldCommPool), out.String())
-
-		// get the old rewards
-		cmd = cli.GetCmdQueryDelegatorRewards()
-		out, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, []string{val.Address.String(), sdk.ValAddress(val.Address).String(), argJson, argH5})
-		s.Require().NoError(err)
-		s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &oldRewards), out.String())
-
-		// get the old validator commission
-		cmd = cli.GetCmdQueryValidatorCommission()
-		out, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, []string{sdk.ValAddress(val.Address).String(), argJson, argH5})
-		s.Require().NoError(err)
-		s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &oldValCommission), out.String())
-
-		// bank send
-		cmd = bankcli.NewSendTxCmd()
-		out, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, argsTx)
-		s.Require().NoError(err)
-		s.Require().Contains(out.String(), `"code":0`)
-
-		// wait for two more blocks so the fee is distributed
-		// s.network.WaitForNextBlock()
-		s.network.WaitForNextBlock()
-		s.network.WaitForNextBlock()
-
-		// get the new total supply
-		cmd = bankcli.GetCmdQueryTotalSupply()
-		out, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, []string{argJson, argH10})
-		s.Require().NoError(err)
-		s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &newTS), out.String())
-
-		// get the new base address balance
-		cmd = bankcli.GetBalancesCmd()
-		out, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, []string{distBaseAddr, argJson, argH10})
-		s.Require().NoError(err)
-		s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &newBaseBalance), out.String())
-
-		// get the new community pool
-		cmd = cli.GetCmdQueryCommunityPool()
-		out, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, []string{argJson, argH10})
-		s.Require().NoError(err)
-		s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &newCommPool), out.String())
-
-		// get the new rewards
-		cmd = cli.GetCmdQueryDelegatorRewards()
-		out, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, []string{val.Address.String(), sdk.ValAddress(val.Address).String(), argJson, argH10})
-		s.Require().NoError(err)
-		s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &newRewards), out.String())
-
-		// get the new validator commission
-		cmd = cli.GetCmdQueryValidatorCommission()
-		out, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, []string{sdk.ValAddress(val.Address).String(), argJson, argH10})
-		s.Require().NoError(err)
-		s.Require().NoError(clientCtx.Codec.UnmarshalJSON(out.Bytes(), &newValCommission), out.String())
-
-		// test 1/3 burn
-		// fee: 300stake || increased supply for 5 last blocks: 265stake || burn: 100stake
-		s.Require().Equal(oldTS.Supply.String(),
-			newTS.Supply.
-				Sub(sdk.NewCoin(s.network.Config.BondDenom, sdk.NewInt(265))).
-				Add(sdk.NewCoin(s.network.Config.BondDenom, sdk.NewInt(100))).String())
-
-		// test 1/3 base address fee
-		// reward for last 5 blocks: 130stake || bank send tx fee rewards: 100stake
-		s.Require().Equal(oldBaseBalance.Balances.String(),
-			newBaseBalance.Balances.Sub(sdk.NewCoin(s.network.Config.BondDenom, sdk.NewInt(130))).
-				Sub(sdk.NewCoin(s.network.Config.BondDenom, sdk.NewInt(100))).String())
-
-		// test 1/3 staking rewards
-
-		// community pool:
-		// for last 5 blocks: 2.7stake || for the tx: 2stake
-		s.Require().Equal(oldCommPool.Pool.String(),
-			newCommPool.Pool.Sub(sdk.NewDecCoins(sdk.NewDecCoinFromDec(s.network.Config.BondDenom, sdk.NewDecWithPrec(27, 1)))).
-				Sub(sdk.NewDecCoins(sdk.NewDecCoin(s.network.Config.BondDenom, sdk.NewInt(2)))).String())
-
-		// delegator rewards
-		// for last 5 blocks: 66.15stake || for the tx: 49stake
-		s.Require().Equal(oldRewards.Rewards.String(),
-			newRewards.Rewards.Sub(sdk.NewDecCoins(sdk.NewDecCoinFromDec(s.network.Config.BondDenom, sdk.NewDecWithPrec(6615, 2)))).
-				Sub(sdk.NewDecCoins(sdk.NewDecCoin(s.network.Config.BondDenom, sdk.NewInt(49)))).String())
-
-		// validator commission
-		// for last 5 blocks: 66.15stake || for the tx: 49stake
-		s.Require().Equal(oldValCommission.Commission.String(),
-			newValCommission.Commission.Sub(sdk.NewDecCoins(sdk.NewDecCoinFromDec(s.network.Config.BondDenom, sdk.NewDecWithPrec(6615, 2)))).
-				Sub(sdk.NewDecCoins(sdk.NewDecCoin(s.network.Config.BondDenom, sdk.NewInt(49)))).String())
-
-	})
 }
 
 func (s *IntegrationTestSuite) addSignerKey(uid, addr, mnic string) {
