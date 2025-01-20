@@ -18,4 +18,6 @@ var (
 	ErrEmptyProposalRecipient  = sdkerrors.Register(ModuleName, 11, "invalid community pool spend proposal recipient")
 	ErrNoValidatorExists       = sdkerrors.Register(ModuleName, 12, "validator does not exist")
 	ErrNoDelegationExists      = sdkerrors.Register(ModuleName, 13, "delegation does not exist")
+	ErrInvalidRatio            = sdkerrors.Register(ModuleName, 14, "invalid ratio")
+	ErrInvalidModerator        = sdkerrors.Register(ModuleName, 15, "only moderator is allowed for this msg")
 )

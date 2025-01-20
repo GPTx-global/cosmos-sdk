@@ -34,6 +34,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/errors"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
@@ -204,6 +205,20 @@ func genesisStateWithValSet(t *testing.T,
 	// update total supply
 	bankGenesis := banktypes.NewGenesisState(banktypes.DefaultGenesisState().Params, balances, totalSupply, []banktypes.Metadata{})
 	genesisState[banktypes.ModuleName] = app.AppCodec().MustMarshalJSON(bankGenesis)
+
+	// update distribution moderator and base address
+	addrStr := "cosmos1hd6fsrvnz6qkp87s3u86ludegq97agxsdkwzyh"
+	// if len(genAccs) > 0 {
+	// 	addrStr = genAccs[0].GetAddress().String()
+	// }
+	distrGenesis := distrtypes.DefaultGenesisState()
+	if distrGenesis.ModeratorAddress == "" {
+		distrGenesis.ModeratorAddress = addrStr
+	}
+	if distrGenesis.BaseAddress == "" {
+		distrGenesis.BaseAddress = addrStr
+	}
+	genesisState[distrtypes.ModuleName] = app.AppCodec().MustMarshalJSON(distrGenesis)
 
 	return genesisState
 }

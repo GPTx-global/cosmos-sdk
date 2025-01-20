@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -69,7 +70,7 @@ func (s *DepositTestSuite) SetupNewSuite() {
 }
 
 func (s *DepositTestSuite) submitProposal(val *network.Validator, initialDeposit sdk.Coin, id int) {
-	var exactArgs []string
+	exactArgs := []string{fmt.Sprintf("--%s=200000", flags.FlagGas)}
 
 	if !initialDeposit.IsZero() {
 		exactArgs = append(exactArgs, fmt.Sprintf("--%s=%s", cli.FlagDeposit, initialDeposit.String()))
@@ -101,7 +102,7 @@ func (s *DepositTestSuite) TestQueryDepositsWithoutInitialDeposit() {
 
 	// deposit amount
 	depositAmount := sdk.NewCoin(s.cfg.BondDenom, v1.DefaultMinDepositTokens.Add(sdk.NewInt(50))).String()
-	_, err := MsgDeposit(clientCtx, val.Address.String(), proposalID, depositAmount)
+	_, err := MsgDeposit(clientCtx, val.Address.String(), proposalID, depositAmount, fmt.Sprintf("--%s=200000", flags.FlagGas))
 	s.Require().NoError(err)
 
 	// query deposit

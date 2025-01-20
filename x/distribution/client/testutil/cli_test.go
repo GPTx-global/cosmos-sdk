@@ -17,3 +17,7 @@ func TestGRPCQueryTestSuite(t *testing.T) {
 func TestWithdrawAllSuite(t *testing.T) {
 	suite.Run(t, new(WithdrawAllTestSuite))
 }
+
+func TestRatioDistributionSuite(t *testing.T) {
+	suite.Run(t, new(RatioDistributionTestSuite))
+}

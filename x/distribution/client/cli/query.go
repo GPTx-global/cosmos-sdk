@@ -32,6 +32,9 @@ func GetQueryCmd() *cobra.Command {
 		GetCmdQueryValidatorSlashes(),
 		GetCmdQueryDelegatorRewards(),
 		GetCmdQueryCommunityPool(),
+		GetCmdQueryRatio(),
+		GetCmdQueryBaseAddress(),
+		GetCmdQueryModerator(),
 	)
 
 	return distQueryCmd
@@ -353,6 +356,111 @@ $ %s query distribution community-pool
 			queryClient := types.NewQueryClient(clientCtx)
 
 			res, err := queryClient.CommunityPool(cmd.Context(), &types.QueryCommunityPoolRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+
+// GetCmdQueryRatio returns the command for fetching distribution ratio info.
+func GetCmdQueryRatio() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "ratio",
+		Args:  cobra.NoArgs,
+		Short: "Query the ratio for tx fee distribution",
+		Long: strings.TrimSpace(
+			fmt.Sprintf(`Query the fee distribution ratio info.
+
+Example:
+$ %s query distribution ratio
+`,
+				version.AppName,
+			),
+		),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.Ratio(cmd.Context(), &types.QueryRatioRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+
+// GetCmdQueryBaseAddress returns the command for fetching distribution ratio info.
+func GetCmdQueryBaseAddress() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "base-address",
+		Args:  cobra.NoArgs,
+		Short: "Query the base address for fee distribution",
+		Long: strings.TrimSpace(
+			fmt.Sprintf(`Query the distribution base address.
+
+Example:
+$ %s query distribution base-address
+`,
+				version.AppName,
+			),
+		),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.BaseAddress(cmd.Context(), &types.QueryBaseAddressRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+
+// GetCmdQueryModerator returns the command for fetching distribution ratio info.
+func GetCmdQueryModerator() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "moderator-address",
+		Args:  cobra.NoArgs,
+		Short: "Query the moderator address for distribution modue",
+		Long: strings.TrimSpace(
+			fmt.Sprintf(`Query the distribution moderator address.
+
+Example:
+$ %s query distribution moderator-address
+`,
+				version.AppName,
+			),
+		),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.Moderator(cmd.Context(), &types.QueryModeratorRequest{})
 			if err != nil {
 				return err
 			}

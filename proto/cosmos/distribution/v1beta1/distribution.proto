@@ -152,3 +152,24 @@ message CommunityPoolSpendProposalWithDeposit {
   string amount      = 4;
   string deposit     = 5;
 }
+
+
+// Ratio defines the fee distribution ratio 
+message Ratio {
+  option (gogoproto.goproto_stringer) = false;
+  string staking_rewards                = 1 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+  string base = 2 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+  string burn = 3 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+}

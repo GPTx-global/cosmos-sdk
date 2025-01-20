@@ -76,12 +76,12 @@ func (s *IntegrationTestSuite) SetupSuite() {
 
 	unbondingAmount := sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(5))
 	// unbonding the amount
-	out, err = MsgUnbondExec(val.ClientCtx, val.Address, val.ValAddress, unbondingAmount)
+	out, err = MsgUnbondExec(val.ClientCtx, val.Address, val.ValAddress, unbondingAmount, fmt.Sprintf("--%s=200000", flags.FlagGas))
 	s.Require().NoError(err)
 	s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txRes))
 	s.Require().Equal(uint32(0), txRes.Code)
 	// unbonding the amount
-	out, err = MsgUnbondExec(val.ClientCtx, val.Address, val.ValAddress, unbondingAmount)
+	out, err = MsgUnbondExec(val.ClientCtx, val.Address, val.ValAddress, unbondingAmount, fmt.Sprintf("--%s=200000", flags.FlagGas))
 	s.Require().NoError(err)
 	s.Require().NoError(err)
 	s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txRes))
@@ -144,6 +144,7 @@ func (s *IntegrationTestSuite) TestNewCreateValidatorCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -163,6 +164,7 @@ func (s *IntegrationTestSuite) TestNewCreateValidatorCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -183,6 +185,7 @@ func (s *IntegrationTestSuite) TestNewCreateValidatorCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -204,6 +207,7 @@ func (s *IntegrationTestSuite) TestNewCreateValidatorCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			false, 0, &sdk.TxResponse{},
 		},
@@ -1107,6 +1111,7 @@ func (s *IntegrationTestSuite) TestNewDelegateCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -1118,6 +1123,7 @@ func (s *IntegrationTestSuite) TestNewDelegateCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -1130,6 +1136,7 @@ func (s *IntegrationTestSuite) TestNewDelegateCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			false, 0, &sdk.TxResponse{},
 		},
@@ -1260,6 +1267,7 @@ func (s *IntegrationTestSuite) TestNewUnbondCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -1271,6 +1279,7 @@ func (s *IntegrationTestSuite) TestNewUnbondCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -1283,6 +1292,7 @@ func (s *IntegrationTestSuite) TestNewUnbondCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			false, 0, &sdk.TxResponse{},
 		},
@@ -1326,6 +1336,7 @@ func (s *IntegrationTestSuite) TestNewCancelUnbondingDelegationCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -1337,6 +1348,7 @@ func (s *IntegrationTestSuite) TestNewCancelUnbondingDelegationCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -1349,6 +1361,7 @@ func (s *IntegrationTestSuite) TestNewCancelUnbondingDelegationCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			true, 0, nil,
 		},
@@ -1362,6 +1375,7 @@ func (s *IntegrationTestSuite) TestNewCancelUnbondingDelegationCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			false, sdkerrors.ErrNotFound.ABCICode(), &sdk.TxResponse{},
 		},
@@ -1374,6 +1388,7 @@ func (s *IntegrationTestSuite) TestNewCancelUnbondingDelegationCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			false, sdkerrors.ErrInvalidRequest.ABCICode(), &sdk.TxResponse{},
 		},
@@ -1386,6 +1401,7 @@ func (s *IntegrationTestSuite) TestNewCancelUnbondingDelegationCmd() {
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+				fmt.Sprintf("--%s=200000", flags.FlagGas),
 			},
 			false, 0, &sdk.TxResponse{},
 		},
@@ -1450,6 +1466,7 @@ func (s *IntegrationTestSuite) TestBlockResults() {
 		sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(200))), fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+		fmt.Sprintf("--%s=200000", flags.FlagGas),
 	)
 	require.NoError(err)
 
@@ -1464,6 +1481,7 @@ func (s *IntegrationTestSuite) TestBlockResults() {
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+		fmt.Sprintf("--%s=200000", flags.FlagGas),
 	})
 	require.NoError(err)
 

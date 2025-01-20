@@ -170,3 +170,54 @@ func (k Keeper) FundCommunityPool(ctx sdk.Context, amount sdk.Coins, sender sdk.
 
 	return nil
 }
+
+// GetModeratorAddress returns the current moderator address.
+func (k Keeper) GetModeratorAddress(ctx sdk.Context) string {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.ModeratorAddrKey)
+	if len(bz) == 0 {
+		return ""
+	}
+	return string(bz)
+}
+
+// SetModeratorAddress adds/updates the moderator address.
+func (k Keeper) SetModeratorAddress(ctx sdk.Context, moderator_address string) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.ModeratorAddrKey, []byte(moderator_address))
+}
+
+// GetBaseAddress returns the current base address
+func (k Keeper) GetBaseAddress(ctx sdk.Context) string {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.BaseAddrKey)
+	if len(bz) == 0 {
+		return ""
+	}
+	return string(bz)
+}
+
+// SetBaseAddress adds/updates the base address.
+func (k Keeper) SetBaseAddress(ctx sdk.Context, base_address string) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.BaseAddrKey, []byte(base_address))
+}
+
+// get the ratio
+func (k Keeper) GetRatio(ctx sdk.Context) (ratio types.Ratio) {
+	store := ctx.KVStore(k.storeKey)
+	b := store.Get(types.RatioKey)
+	if b == nil {
+		panic("stored ratio should not have been nil")
+	}
+
+	k.cdc.MustUnmarshal(b, &ratio)
+	return
+}
+
+// set the ratio
+func (k Keeper) SetRatio(ctx sdk.Context, ratio types.Ratio) {
+	store := ctx.KVStore(k.storeKey)
+	b := k.cdc.MustMarshal(&ratio)
+	store.Set(types.RatioKey, b)
+}

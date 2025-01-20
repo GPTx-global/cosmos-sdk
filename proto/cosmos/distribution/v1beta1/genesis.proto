@@ -141,4 +141,13 @@ message GenesisState {
 
   // fee_pool defines the validator slash events at genesis.
   repeated ValidatorSlashEventRecord validator_slash_events = 10 [(gogoproto.nullable) = false];
+
+  // Ratio defines the fee distribution ratio between rewards/base/burn
+  Ratio ratio = 11 [(gogoproto.nullable) = false];
+
+  // base_address hold the foundation address for receiving the 1/3 of the fees 
+  string base_address = 12;
+
+  // moderator is allowed to set the ratio and base address
+  string moderator_address = 13;
 }

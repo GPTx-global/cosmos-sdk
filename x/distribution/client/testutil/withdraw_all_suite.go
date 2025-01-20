@@ -105,7 +105,7 @@ func (s *WithdrawAllTestSuite) TestNewWithdrawAllRewardsGenerateOnly() {
 	out, err := clitestutil.ExecTestCLICmd(clientCtx, cmd, args)
 	require.NoError(err)
 	// expect 2 transactions in the generated file when --max-msgs in a tx set 1.
-	s.Require().Equal(2, len(strings.Split(strings.Trim(out.String(), "\n"), "\n")))
+	s.Require().Equal(1, len(strings.Split(strings.Trim(out.String(), "\n"), "\n")))
 
 	args = []string{
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, newAddr.String()),

@@ -116,7 +116,7 @@ func (s *GRPCQueryTestSuite) TestQueryOutstandingRewardsGRPC() {
 	val := s.network.Validators[0]
 	baseURL := val.APIAddress
 
-	rewards, err := sdk.ParseDecCoins("19.6stake")
+	rewards, err := sdk.ParseDecCoins("7.84stake")
 	s.Require().NoError(err)
 
 	testCases := []struct {
@@ -170,7 +170,7 @@ func (s *GRPCQueryTestSuite) TestQueryValidatorCommissionGRPC() {
 	val := s.network.Validators[0]
 	baseURL := val.APIAddress
 
-	commission, err := sdk.ParseDecCoins("9.8stake")
+	commission, err := sdk.ParseDecCoins("3.92stake")
 	s.Require().NoError(err)
 
 	testCases := []struct {
@@ -283,7 +283,7 @@ func (s *GRPCQueryTestSuite) TestQueryDelegatorRewardsGRPC() {
 	val := s.network.Validators[0]
 	baseURL := val.APIAddress
 
-	rewards, err := sdk.ParseDecCoins("9.8stake")
+	rewards, err := sdk.ParseDecCoins("3.92stake")
 	s.Require().NoError(err)
 
 	testCases := []struct {
@@ -463,7 +463,7 @@ func (s *GRPCQueryTestSuite) TestQueryValidatorCommunityPoolGRPC() {
 	val := s.network.Validators[0]
 	baseURL := val.APIAddress
 
-	communityPool, err := sdk.ParseDecCoins("0.4stake")
+	communityPool, err := sdk.ParseDecCoins("0.16stake")
 	s.Require().NoError(err)
 
 	testCases := []struct {
@@ -500,6 +500,99 @@ func (s *GRPCQueryTestSuite) TestQueryValidatorCommunityPoolGRPC() {
 				s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(resp, tc.respType))
 				s.Require().Equal(tc.expected.String(), tc.respType.String())
 			}
+		})
+	}
+}
+
+func (s *GRPCQueryTestSuite) TestQueryRatioGRPC() {
+	val := s.network.Validators[0]
+	baseURL := val.APIAddress
+
+	testCases := []struct {
+		name     string
+		url      string
+		respType proto.Message
+		expected proto.Message
+	}{
+		{
+			"gRPC request ratio",
+			fmt.Sprintf("%s/cosmos/distribution/v1beta1/ratio", baseURL),
+			&types.QueryRatioResponse{},
+			&types.QueryRatioResponse{
+				Ratio: types.DefaultGenesisState().Ratio,
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		resp, err := rest.GetRequest(tc.url)
+		s.Run(tc.name, func() {
+			s.Require().NoError(err)
+			s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(resp, tc.respType))
+			s.Require().Equal(tc.expected, tc.respType)
+		})
+	}
+}
+
+func (s *GRPCQueryTestSuite) TestQueryModeratorGRPC() {
+	val := s.network.Validators[0]
+	baseURL := val.APIAddress
+
+	testCases := []struct {
+		name     string
+		url      string
+		respType proto.Message
+		expected proto.Message
+	}{
+		{
+			"gRPC request moderator",
+			fmt.Sprintf("%s/cosmos/distribution/v1beta1/moderator_address", baseURL),
+			&types.QueryModeratorResponse{},
+			&types.QueryModeratorResponse{
+				ModeratorAddress: "cosmos1hd6fsrvnz6qkp87s3u86ludegq97agxsdkwzyh",
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		resp, err := rest.GetRequest(tc.url)
+		s.Run(tc.name, func() {
+			s.Require().NoError(err)
+			s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(resp, tc.respType))
+			s.Require().Equal(tc.expected, tc.respType)
+		})
+	}
+}
+
+func (s *GRPCQueryTestSuite) TestQueryBaseAddressGRPC() {
+	val := s.network.Validators[0]
+	baseURL := val.APIAddress
+
+	testCases := []struct {
+		name     string
+		url      string
+		respType proto.Message
+		expected proto.Message
+	}{
+		{
+			"gRPC request base address",
+			fmt.Sprintf("%s/cosmos/distribution/v1beta1/base_address", baseURL),
+			&types.QueryBaseAddressResponse{},
+			&types.QueryBaseAddressResponse{
+				BaseAddress: "cosmos1hd6fsrvnz6qkp87s3u86ludegq97agxsdkwzyh",
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		resp, err := rest.GetRequest(tc.url)
+		s.Run(tc.name, func() {
+			s.Require().NoError(err)
+			s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(resp, tc.respType))
+			s.Require().Equal(tc.expected, tc.respType)
 		})
 	}
 }

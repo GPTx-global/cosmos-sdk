@@ -11,6 +11,9 @@ const (
 	TypeMsgWithdrawDelegatorReward     = "withdraw_delegator_reward"
 	TypeMsgWithdrawValidatorCommission = "withdraw_validator_commission"
 	TypeMsgFundCommunityPool           = "fund_community_pool"
+	TypeMsgChangeRatio                 = "change_ratio"
+	TypeMsgChangeBaseAddress           = "change_base_address"
+	TypeMsgChangeModerator             = "change_moderator"
 )
 
 // Verify interface at compile time
@@ -148,6 +151,123 @@ func (msg MsgFundCommunityPool) ValidateBasic() error {
 	}
 	if _, err := sdk.AccAddressFromBech32(msg.Depositor); err != nil {
 		return sdkerrors.ErrInvalidAddress.Wrapf("invalid depositor address: %s", err)
+	}
+	return nil
+}
+
+// NewMsgChangeRatio returns a new MsgChangeRatio with a new distribution ratio
+func NewMsgChangeRatio(moderator sdk.AccAddress, ratio Ratio) *MsgChangeRatio {
+	return &MsgChangeRatio{
+		ModeratorAddress: moderator.String(),
+		Ratio:            ratio,
+	}
+}
+
+// Route returns the MsgChangeRatio message route.
+func (msg MsgChangeRatio) Route() string { return ModuleName }
+
+// Type returns the MsgChangeRatio message type.
+func (msg MsgChangeRatio) Type() string { return TypeMsgChangeRatio }
+
+// GetSigners returns the signer addresses that are expected to sign the result
+// of GetSignBytes.
+func (msg MsgChangeRatio) GetSigners() []sdk.AccAddress {
+	moderator, _ := sdk.AccAddressFromBech32(msg.ModeratorAddress)
+	return []sdk.AccAddress{moderator}
+}
+
+// GetSignBytes returns the raw bytes for a MsgChangeRatio message that
+// the expected signer needs to sign.
+func (msg MsgChangeRatio) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(&msg)
+	return sdk.MustSortJSON(bz)
+}
+
+// ValidateBasic performs basic MsgChangeRatio message validation.
+func (msg MsgChangeRatio) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.ModeratorAddress); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid moderator address: %s", err)
+	}
+	if err := msg.Ratio.ValidateRatio(); err != nil {
+		return ErrInvalidRatio.Wrapf("%s", err)
+	}
+	return nil
+}
+
+// NewMsgChangeBaseAddress returns a new MsgChangeBaseAddress with a new base address
+func NewMsgChangeBaseAddress(moderator sdk.AccAddress, newBaseAddress sdk.AccAddress) *MsgChangeBaseAddress {
+	return &MsgChangeBaseAddress{
+		ModeratorAddress: moderator.String(),
+		NewBaseAddress:   newBaseAddress.String(),
+	}
+}
+
+// Route returns the MsgChangeBaseAddress message route.
+func (msg MsgChangeBaseAddress) Route() string { return ModuleName }
+
+// Type returns the MsgChangeBaseAddress message type.
+func (msg MsgChangeBaseAddress) Type() string { return TypeMsgChangeBaseAddress }
+
+// GetSigners returns the signer addresses that are expected to sign the result
+// of GetSignBytes.
+func (msg MsgChangeBaseAddress) GetSigners() []sdk.AccAddress {
+	moderator, _ := sdk.AccAddressFromBech32(msg.ModeratorAddress)
+	return []sdk.AccAddress{moderator}
+}
+
+// GetSignBytes returns the raw bytes for a MsgChangeBaseAddress message that
+// the expected signer needs to sign.
+func (msg MsgChangeBaseAddress) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(&msg)
+	return sdk.MustSortJSON(bz)
+}
+
+// ValidateBasic performs basic MsgChangeBaseAddress message validation.
+func (msg MsgChangeBaseAddress) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.ModeratorAddress); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid moderator address: %s", err)
+	}
+	if _, err := sdk.AccAddressFromBech32(msg.NewBaseAddress); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid new base address: %s", err)
+	}
+	return nil
+}
+
+// NewMsgChangeModerator returns a new MsgChangeModerator with a new moderator
+func NewMsgChangeModerator(moderator sdk.AccAddress, newModerator sdk.AccAddress) *MsgChangeModerator {
+	return &MsgChangeModerator{
+		ModeratorAddress:    moderator.String(),
+		NewModeratorAddress: newModerator.String(),
+	}
+}
+
+// Route returns the MsgChangeModerator message route.
+func (msg MsgChangeModerator) Route() string { return ModuleName }
+
+// Type returns the MsgChangeModerator message type.
+func (msg MsgChangeModerator) Type() string { return TypeMsgChangeModerator }
+
+// GetSigners returns the signer addresses that are expected to sign the result
+// of GetSignBytes.
+func (msg MsgChangeModerator) GetSigners() []sdk.AccAddress {
+	moderator, _ := sdk.AccAddressFromBech32(msg.ModeratorAddress)
+	return []sdk.AccAddress{moderator}
+}
+
+// GetSignBytes returns the raw bytes for a MsgChangeModerator message that
+// the expected signer needs to sign.
+func (msg MsgChangeModerator) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(&msg)
+	return sdk.MustSortJSON(bz)
+}
+
+// ValidateBasic performs basic MsgChangeModerator message validation.
+func (msg MsgChangeModerator) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.ModeratorAddress); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid moderator address: %s", err)
+	}
+	if _, err := sdk.AccAddressFromBech32(msg.NewModeratorAddress); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid new moderator address: %s", err)
 	}
 	return nil
 }
