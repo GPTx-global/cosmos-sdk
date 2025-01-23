@@ -32,43 +32,47 @@ func (k Keeper) AllocateTokens(
 	}
 
 	ratio := k.GetRatio(ctx)
+	baseFee := sdk.Coins{}
+	burnFee := sdk.Coins{}
 
 	if len(feesCollectedInt) > 0 {
 		// burn fee: ratio.Burn
-		burnFee := k.CalculatePercentage(feesCollectedInt, ratio.Burn)
-		err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, burnFee)
-		if err != nil {
-			panic(err)
+		if ratio.Burn.GT(sdk.MustNewDecFromStr("0.0")) {
+			burnFee = k.CalculatePercentage(feesCollectedInt, ratio.Burn)
+			err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, burnFee)
+			if err != nil {
+				panic(err)
+			}
+
+			// emit burn fee
+			ctx.EventManager().EmitEvent(
+				sdk.NewEvent(
+					types.EventTypeBurnFee,
+					sdk.NewAttribute(sdk.AttributeKeyAmount, burnFee.String()),
+				),
+			)
+			logger.Info("Event Emitted", "type", types.EventTypeBurnFee, "key", sdk.AttributeKeyAmount, "value", burnFee.String())
 		}
-
-		// emit burn fee
-		ctx.EventManager().EmitEvent(
-			sdk.NewEvent(
-				types.EventTypeBurnFee,
-				sdk.NewAttribute(sdk.AttributeKeyAmount, burnFee.String()),
-			),
-		)
-		logger.Info("Event Emitted", "type", types.EventTypeBurnFee, "key", sdk.AttributeKeyAmount, "value", burnFee.String())
-
 		// base fee: ratio.Base
-		baseAddr := sdk.MustAccAddressFromBech32(k.GetBaseAddress(ctx))
-		baseFee := k.CalculatePercentage(feesCollectedInt, ratio.Base)
-		err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, baseAddr, baseFee)
-		if err != nil {
-			panic(err)
-		}
+		if ratio.Base.GT(sdk.MustNewDecFromStr("0.0")) {
+			baseAddr := sdk.MustAccAddressFromBech32(k.GetBaseAddress(ctx))
+			baseFee = k.CalculatePercentage(feesCollectedInt, ratio.Base)
+			err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, baseAddr, baseFee)
+			if err != nil {
+				panic(err)
+			}
 
-		// emit base fee
-		ctx.EventManager().EmitEvent(
-			sdk.NewEvent(
-				types.EventTypeBaseFee,
-				sdk.NewAttribute(sdk.AttributeKeyAmount, baseFee.String()),
-			),
-		)
-		logger.Info("Event Emitted", "type", types.EventTypeBaseFee, "key", sdk.AttributeKeyAmount, "value", baseFee.String())
+			// emit base fee
+			ctx.EventManager().EmitEvent(
+				sdk.NewEvent(
+					types.EventTypeBaseFee,
+					sdk.NewAttribute(sdk.AttributeKeyAmount, baseFee.String()),
+				),
+			)
+			logger.Info("Event Emitted", "type", types.EventTypeBaseFee, "key", sdk.AttributeKeyAmount, "value", baseFee.String())
+		}
 
 		feesCollectedInt = feesCollectedInt.Sub(burnFee...).Sub(baseFee...)
-
 		feesCollected := sdk.NewDecCoinsFromCoins(feesCollectedInt...)
 		logger.Info("Event Emitted", "type", types.EventTypeStakingRewards, "key", sdk.AttributeKeyAmount, "value", feesCollectedInt.String())
 
