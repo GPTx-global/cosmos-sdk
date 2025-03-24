@@ -1,6 +1,7 @@
 module github.com/cosmos/cosmos-sdk/orm
 
 go 1.18
+toolchain go1.24.1
 
 require (
 	cosmossdk.io/errors v1.0.0-beta.6
@@ -13,7 +14,7 @@ require (
 	github.com/stretchr/testify v1.7.1
 	github.com/tendermint/tm-db v0.6.7
 	google.golang.org/grpc v1.46.2
-	google.golang.org/protobuf v1.28.0
+	google.golang.org/protobuf v1.36.6
 	gotest.tools/v3 v3.2.0
 	pgregory.net/rapid v0.4.7
 )
