@@ -50,7 +50,7 @@ require (
 	github.com/tendermint/go-amino v0.16.0
 	github.com/tendermint/tendermint v0.34.28
 	github.com/tendermint/tm-db v0.6.7
-	github.com/tidwall/btree v1.5.0
+	github.com/tidwall/btree v1.8.1
 	golang.org/x/crypto v0.7.0
 	golang.org/x/exp v0.0.0-20230310171629-522b1b587ee0
 	google.golang.org/genproto v0.0.0-20230306155012-7f2fa6fef1f4
