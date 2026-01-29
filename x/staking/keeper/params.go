@@ -56,6 +56,12 @@ func (k Keeper) MinCommissionRate(ctx context.Context) (math.LegacyDec, error) {
 	return params.MinCommissionRate, err
 }
 
+// MinValidatorBondAmount - Minimum validator bond amount
+func (k Keeper) MinValidatorBondAmount(ctx context.Context) (math.Int, error) {
+	params, err := k.GetParams(ctx)
+	return params.MinValidatorBondAmount, err
+}
+
 // SetParams sets the x/staking module parameters.
 // CONTRACT: This method performs no validation of the parameters.
 func (k Keeper) SetParams(ctx context.Context, params types.Params) error {

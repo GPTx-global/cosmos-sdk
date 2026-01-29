@@ -29,20 +29,24 @@ const (
 	// value by not adding the staking module to the application module manager's
 	// SetOrderBeginBlockers.
 	DefaultHistoricalEntries uint32 = 10000
+
+	// DefaultMinValidatorBondAmount is set to 0 (no minimum bond amount requirement)
+	DefaultMinValidatorBondAmount = 0
 )
 
 // DefaultMinCommissionRate is set to 0%
 var DefaultMinCommissionRate = math.LegacyZeroDec()
 
 // NewParams creates a new Params instance
-func NewParams(unbondingTime time.Duration, maxValidators, maxEntries, historicalEntries uint32, bondDenom string, minCommissionRate math.LegacyDec) Params {
+func NewParams(unbondingTime time.Duration, maxValidators, maxEntries, historicalEntries uint32, bondDenom string, minCommissionRate math.LegacyDec, minValidatorBondAmount math.Int) Params {
 	return Params{
-		UnbondingTime:     unbondingTime,
-		MaxValidators:     maxValidators,
-		MaxEntries:        maxEntries,
-		HistoricalEntries: historicalEntries,
-		BondDenom:         bondDenom,
-		MinCommissionRate: minCommissionRate,
+		UnbondingTime:         unbondingTime,
+		MaxValidators:         maxValidators,
+		MaxEntries:            maxEntries,
+		HistoricalEntries:     historicalEntries,
+		BondDenom:             bondDenom,
+		MinCommissionRate:     minCommissionRate,
+		MinValidatorBondAmount: minValidatorBondAmount,
 	}
 }
 
@@ -55,6 +59,7 @@ func DefaultParams() Params {
 		DefaultHistoricalEntries,
 		sdk.DefaultBondDenom,
 		DefaultMinCommissionRate,
+		math.NewInt(DefaultMinValidatorBondAmount),
 	)
 }
 
@@ -101,6 +106,10 @@ func (p Params) Validate() error {
 	}
 
 	if err := validateHistoricalEntries(p.HistoricalEntries); err != nil {
+		return err
+	}
+
+	if err := validateMinValidatorBondAmount(p.MinValidatorBondAmount); err != nil {
 		return err
 	}
 
@@ -199,6 +208,22 @@ func validateMinCommissionRate(i any) error {
 	}
 	if v.GT(math.LegacyOneDec()) {
 		return fmt.Errorf("minimum commission rate cannot be greater than 100%%: %s", v)
+	}
+
+	return nil
+}
+
+func validateMinValidatorBondAmount(i any) error {
+	v, ok := i.(math.Int)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	if v.IsNil() {
+		return fmt.Errorf("minimum validator bond amount cannot be nil: %s", v)
+	}
+	if v.IsNegative() {
+		return fmt.Errorf("minimum validator bond amount cannot be negative: %s", v)
 	}
 
 	return nil
