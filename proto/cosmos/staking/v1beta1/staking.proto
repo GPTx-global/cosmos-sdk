@@ -319,6 +319,14 @@ message Params {
     (amino.dont_omitempty) = true,
     (cosmos_proto.scalar)  = "cosmos.Dec"
   ];
+  // min_validator_bond_amount is the chain-wide minimum bond amount required for a validator
+  string min_validator_bond_amount = 7 [
+    (gogoproto.moretags)   = "yaml:\"min_validator_bond_amount\"",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true,
+    (cosmos_proto.scalar)  = "cosmos.Int"
+  ];
 }
 
 // DelegationResponse is equivalent to Delegation except that it contains a

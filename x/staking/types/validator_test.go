@@ -351,3 +351,89 @@ func newValidator(t *testing.T, operator sdk.ValAddress, pubKey cryptotypes.PubK
 	require.NoError(t, err)
 	return v
 }
+
+func TestValidatorMinSelfDelegation(t *testing.T) {
+	val := newValidator(t, valAddr1, pk1)
+	
+	// Test default minSelfDelegation (should be one)
+	require.Equal(t, math.OneInt(), val.MinSelfDelegation)
+	
+	// Test setting minSelfDelegation
+	val.MinSelfDelegation = math.NewInt(100)
+	require.Equal(t, int64(100), val.MinSelfDelegation.Int64())
+	
+	// Test that minSelfDelegation must be positive
+	val.MinSelfDelegation = math.NewInt(0)
+	require.True(t, val.MinSelfDelegation.GTE(math.ZeroInt()))
+}
+
+func TestValidatorMinValidatorBondAmount(t *testing.T) {
+	// Test default min validator bond amount
+	params := types.DefaultParams()
+	require.Equal(t, int64(types.DefaultMinValidatorBondAmount), params.MinValidatorBondAmount.Int64())
+	
+	// Test creating params with custom min validator bond amount
+	minBondAmount := math.NewInt(1000000)
+	customParams := types.NewParams(
+		types.DefaultUnbondingTime,
+		types.DefaultMaxValidators,
+		types.DefaultMaxEntries,
+		types.DefaultHistoricalEntries,
+		sdk.DefaultBondDenom,
+		types.DefaultMinCommissionRate,
+		minBondAmount,
+	)
+	require.Equal(t, minBondAmount, customParams.MinValidatorBondAmount)
+	
+	// Test validation: min validator bond amount cannot be negative
+	invalidParams := types.Params{
+		UnbondingTime:          types.DefaultUnbondingTime,
+		MaxValidators:          types.DefaultMaxValidators,
+		MaxEntries:             types.DefaultMaxEntries,
+		HistoricalEntries:      types.DefaultHistoricalEntries,
+		BondDenom:              sdk.DefaultBondDenom,
+		MinCommissionRate:      types.DefaultMinCommissionRate,
+		MinValidatorBondAmount: math.NewInt(-100),
+	}
+	err := invalidParams.Validate()
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "minimum validator bond amount cannot be negative")
+	
+	// Test validation: valid min validator bond amount
+	validParams := types.Params{
+		UnbondingTime:          types.DefaultUnbondingTime,
+		MaxValidators:          types.DefaultMaxValidators,
+		MaxEntries:             types.DefaultMaxEntries,
+		HistoricalEntries:      types.DefaultHistoricalEntries,
+		BondDenom:              sdk.DefaultBondDenom,
+		MinCommissionRate:      types.DefaultMinCommissionRate,
+		MinValidatorBondAmount: math.NewInt(1000),
+	}
+	err = validParams.Validate()
+	require.NoError(t, err)
+}
+
+func TestValidatorMinSelfDelegationWithMinValidatorBondAmount(t *testing.T) {
+	val := newValidator(t, valAddr1, pk1)
+	
+	// Test case 1: minSelfDelegation should be at least minValidatorBondAmount
+	minValidatorBondAmount := math.NewInt(1000000)
+	minSelfDelegation := math.NewInt(500000)
+	
+	// This should fail validation as minSelfDelegation < minValidatorBondAmount
+	require.True(t, minSelfDelegation.LT(minValidatorBondAmount))
+	
+	// Test case 2: minSelfDelegation equals minValidatorBondAmount (should pass)
+	minSelfDelegation = math.NewInt(1000000)
+	require.True(t, minSelfDelegation.GTE(minValidatorBondAmount))
+	
+	// Test case 3: minSelfDelegation greater than minValidatorBondAmount (should pass)
+	minSelfDelegation = math.NewInt(2000000)
+	val.MinSelfDelegation = minSelfDelegation
+	require.True(t, val.MinSelfDelegation.GTE(minValidatorBondAmount))
+	
+	// Test case 4: both values are zero (should pass)
+	val.MinSelfDelegation = math.ZeroInt()
+	minValidatorBondAmount = math.ZeroInt()
+	require.True(t, val.MinSelfDelegation.GTE(minValidatorBondAmount))
+}

@@ -36,4 +36,14 @@ func TestValidateParams(t *testing.T) {
 
 	params.MinCommissionRate = math.LegacyNewDec(2)
 	require.Error(t, params.Validate())
+
+	// reset to default for next test
+	params = types.DefaultParams()
+
+	// validate min validator bond amount
+	params.MinValidatorBondAmount = math.NewInt(-1)
+	require.Error(t, params.Validate())
+
+	params.MinValidatorBondAmount = math.NewInt(100)
+	require.NoError(t, params.Validate())
 }

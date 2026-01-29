@@ -78,6 +78,17 @@ func (k msgServer) CreateValidator(ctx context.Context, msg *types.MsgCreateVali
 		)
 	}
 
+	minValidatorBondAmount, err := k.MinValidatorBondAmount(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if msg.MinSelfDelegation.LT(minValidatorBondAmount) {
+		return nil, errorsmod.Wrapf(
+			types.ErrInsufficientValidatorBond, "minimum self delegation %s must be at least the minimum validator bond amount %s", msg.MinSelfDelegation, minValidatorBondAmount,
+		)
+	}
+
 	if _, err := msg.Description.EnsureLength(); err != nil {
 		return nil, err
 	}
@@ -219,6 +230,17 @@ func (k msgServer) EditValidator(ctx context.Context, msg *types.MsgEditValidato
 
 		if msg.MinSelfDelegation.GT(validator.Tokens) {
 			return nil, types.ErrSelfDelegationBelowMinimum
+		}
+
+		minValidatorBondAmount, err := k.MinValidatorBondAmount(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		if msg.MinSelfDelegation.LT(minValidatorBondAmount) {
+			return nil, errorsmod.Wrapf(
+				types.ErrInsufficientValidatorBond, "minimum self delegation %s must be at least the minimum validator bond amount %s", *msg.MinSelfDelegation, minValidatorBondAmount,
+			)
 		}
 
 		validator.MinSelfDelegation = *msg.MinSelfDelegation

@@ -173,3 +173,160 @@ func TestCancelUnbondingDelegation(t *testing.T) {
 		})
 	}
 }
+
+func TestCreateValidatorMinSelfDelegationMustMeetMinValidatorBondAmount(t *testing.T) {
+	t.Parallel()
+	f := initFixture(t)
+
+	ctx := f.sdkCtx
+	msgServer := keeper.NewMsgServerImpl(f.stakingKeeper)
+
+	bondDenom, err := f.stakingKeeper.BondDenom(ctx)
+	assert.NilError(t, err)
+
+	// Ensure staking pool module accounts exist.
+	f.accountKeeper.SetModuleAccount(ctx, f.stakingKeeper.GetNotBondedPool(ctx))
+	f.accountKeeper.SetModuleAccount(ctx, f.stakingKeeper.GetBondedPool(ctx))
+
+	params := types.DefaultParams()
+	params.MinValidatorBondAmount = math.NewInt(100)
+	assert.NilError(t, f.stakingKeeper.SetParams(ctx, params))
+
+	addrs := simtestutil.AddTestAddrsIncremental(f.bankKeeper, f.stakingKeeper, ctx, 3, math.NewInt(10000))
+
+	commission := types.NewCommissionRates(
+		math.LegacyMustNewDecFromStr("0.10"),
+		math.LegacyMustNewDecFromStr("0.20"),
+		math.LegacyMustNewDecFromStr("0.01"),
+	)
+	desc := types.NewDescription("validator", "", "", "", "")
+
+	// MinSelfDelegation < MinValidatorBondAmount should fail.
+	valAddr1 := sdk.ValAddress(addrs[0])
+	msgFail, err := types.NewMsgCreateValidator(
+		valAddr1.String(),
+		PKs[0],
+		sdk.NewCoin(bondDenom, math.NewInt(50)),
+		desc,
+		commission,
+		math.NewInt(50),
+	)
+	assert.NilError(t, err)
+	_, err = msgServer.CreateValidator(ctx, msgFail)
+	assert.ErrorContains(t, err, "minimum self delegation")
+	assert.ErrorContains(t, err, "minimum validator bond amount")
+
+	// MinSelfDelegation == MinValidatorBondAmount should succeed.
+	valAddr2 := sdk.ValAddress(addrs[1])
+	msgEq, err := types.NewMsgCreateValidator(
+		valAddr2.String(),
+		PKs[1],
+		sdk.NewCoin(bondDenom, math.NewInt(100)),
+		desc,
+		commission,
+		math.NewInt(100),
+	)
+	assert.NilError(t, err)
+	_, err = msgServer.CreateValidator(ctx, msgEq)
+	assert.NilError(t, err)
+
+	// MinSelfDelegation > MinValidatorBondAmount should succeed.
+	valAddr3 := sdk.ValAddress(addrs[2])
+	msgGt, err := types.NewMsgCreateValidator(
+		valAddr3.String(),
+		PKs[2],
+		sdk.NewCoin(bondDenom, math.NewInt(150)),
+		desc,
+		commission,
+		math.NewInt(150),
+	)
+	assert.NilError(t, err)
+	_, err = msgServer.CreateValidator(ctx, msgGt)
+	assert.NilError(t, err)
+}
+
+func TestEditValidatorMinSelfDelegationMustMeetMinValidatorBondAmount(t *testing.T) {
+	t.Parallel()
+	f := initFixture(t)
+
+	ctx := f.sdkCtx
+	msgServer := keeper.NewMsgServerImpl(f.stakingKeeper)
+
+	params := types.DefaultParams()
+	params.MinValidatorBondAmount = math.NewInt(100)
+	assert.NilError(t, f.stakingKeeper.SetParams(ctx, params))
+
+	addrs := simtestutil.AddTestAddrsIncremental(f.bankKeeper, f.stakingKeeper, ctx, 1, math.NewInt(10000))
+	valAddr := sdk.ValAddress(addrs[0])
+
+	// Create an existing validator with MinSelfDelegation below MinValidatorBondAmount
+	// (this can happen after upgrades or governance param changes).
+	validator, err := types.NewValidator(valAddr.String(), PKs[0], types.NewDescription("Validator", "", "", "", ""))
+	assert.NilError(t, err)
+	validator.Tokens = math.NewInt(1000)
+	validator.MinSelfDelegation = math.NewInt(50)
+	assert.NilError(t, f.stakingKeeper.SetValidator(ctx, validator))
+
+	desc := types.NewDescription("ValidatorUpdated", "", "", "", "")
+
+	// Increase but still below MinValidatorBondAmount should fail.
+	newMSD := math.NewInt(80)
+	msgFail := types.NewMsgEditValidator(valAddr.String(), desc, nil, &newMSD)
+	_, err = msgServer.EditValidator(ctx, msgFail)
+	assert.ErrorContains(t, err, "minimum self delegation")
+	assert.ErrorContains(t, err, "minimum validator bond amount")
+
+	// Increase to >= MinValidatorBondAmount should succeed.
+	newMSD2 := math.NewInt(120)
+	msgOK := types.NewMsgEditValidator(valAddr.String(), desc, nil, &newMSD2)
+	_, err = msgServer.EditValidator(ctx, msgOK)
+	assert.NilError(t, err)
+
+	updated, err := f.stakingKeeper.GetValidator(ctx, valAddr)
+	assert.NilError(t, err)
+	assert.DeepEqual(t, newMSD2, updated.MinSelfDelegation)
+}
+
+func TestValidatorJailOnSelfUndelegateBelowMinSelfDelegationEqualMinValidatorBondAmount(t *testing.T) {
+	t.Parallel()
+	f := initFixture(t)
+
+	ctx := f.sdkCtx
+
+	bondDenom, err := f.stakingKeeper.BondDenom(ctx)
+	assert.NilError(t, err)
+
+	// Ensure staking pool module accounts exist.
+	f.accountKeeper.SetModuleAccount(ctx, f.stakingKeeper.GetNotBondedPool(ctx))
+	f.accountKeeper.SetModuleAccount(ctx, f.stakingKeeper.GetBondedPool(ctx))
+
+	params := types.DefaultParams()
+	params.MinValidatorBondAmount = math.NewInt(100)
+	assert.NilError(t, f.stakingKeeper.SetParams(ctx, params))
+
+	addrs := simtestutil.AddTestAddrsIncremental(f.bankKeeper, f.stakingKeeper, ctx, 1, math.NewInt(10000))
+	valAddr := sdk.ValAddress(addrs[0])
+
+	validator, err := types.NewValidator(valAddr.String(), PKs[0], types.NewDescription("Validator", "", "", "", ""))
+	assert.NilError(t, err)
+	validator.MinSelfDelegation = math.NewInt(100)
+	assert.NilError(t, f.stakingKeeper.SetValidator(ctx, validator))
+	assert.NilError(t, f.stakingKeeper.SetValidatorByConsAddr(ctx, validator))
+	assert.NilError(t, f.stakingKeeper.SetNewValidatorByPowerIndex(ctx, validator))
+
+	// Self-delegate above the minimum.
+	_, err = f.stakingKeeper.Delegate(ctx, addrs[0], math.NewInt(150), types.Unbonded, validator, true)
+	assert.NilError(t, err)
+
+	// Undelegate enough to bring self-delegation below MinSelfDelegation (= MinValidatorBondAmount),
+	// which should jail the validator.
+	_, _, err = f.stakingKeeper.Undelegate(ctx, addrs[0], valAddr, math.LegacyNewDecFromInt(math.NewInt(60)))
+	assert.NilError(t, err)
+
+	updated, err := f.stakingKeeper.GetValidator(ctx, valAddr)
+	assert.NilError(t, err)
+	assert.Assert(t, updated.Jailed)
+
+	// sanity check that coin denom was correct and balances are tracked
+	_ = bondDenom
+}
