@@ -20,7 +20,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/staking/client/cli"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
+
+const minValidatorBondAmount = int64(100)
 
 type E2ETestSuite struct {
 	suite.Suite
@@ -41,6 +44,19 @@ func (s *E2ETestSuite) SetupSuite() {
 	}
 
 	var err error
+
+	genesisState := s.cfg.GenesisState
+
+	var stakingData stakingtypes.GenesisState
+	s.Require().NoError(s.cfg.Codec.UnmarshalJSON(genesisState[stakingtypes.ModuleName], &stakingData))
+
+	stakingData.Params.MinValidatorBondAmount = math.NewInt(minValidatorBondAmount)
+
+	stakingDataBz, err := s.cfg.Codec.MarshalJSON(&stakingData)
+	s.Require().NoError(err)
+	genesisState[stakingtypes.ModuleName] = stakingDataBz
+	s.cfg.GenesisState = genesisState
+
 	s.network, err = network.New(s.T(), s.T().TempDir(), s.cfg)
 	s.Require().NoError(err)
 
@@ -154,4 +170,24 @@ func (s *E2ETestSuite) TestBlockResults() {
 		return nil
 	}, 10)
 	// TODO: revisit if this test is doing anything useful
+}
+
+func (s *E2ETestSuite) TestMinValidatorBondAmountOnEditValidator() {
+	val := s.network.Validators[0]
+
+	minBond := math.NewInt(minValidatorBondAmount)
+	belowMinBond := minBond.Sub(math.NewInt(1))
+
+	out, err := MsgEditValidatorExec(val.ClientCtx, val.Address, belowMinBond)
+	s.Require().NoError(err)
+	var txRes sdk.TxResponse
+	s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txRes))
+	s.Require().Equal(stakingtypes.ErrInsufficientValidatorBond.ABCICode(), txRes.Code)
+	s.Require().NoError(s.network.WaitForNextBlock())
+
+	out, err = MsgEditValidatorExec(val.ClientCtx, val.Address, minBond)
+	s.Require().NoError(err)
+	s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txRes))
+	s.Require().Equal(uint32(0), txRes.Code)
+	s.Require().NoError(s.network.WaitForNextBlock())
 }
