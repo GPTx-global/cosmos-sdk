@@ -8,7 +8,6 @@ import (
 	storetypes "cosmossdk.io/store/types"
 
 	"github.com/cosmos/cosmos-sdk/testutil"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	v6 "github.com/cosmos/cosmos-sdk/x/staking/migrations/v6"
 	"github.com/cosmos/cosmos-sdk/x/staking/types"
