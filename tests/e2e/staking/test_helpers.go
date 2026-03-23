@@ -50,3 +50,20 @@ func MsgUnbondExec(clientCtx client.Context, from, valAddress,
 	args = append(args, extraArgs...)
 	return clitestutil.ExecTestCLICmd(clientCtx, stakingcli.NewUnbondCmd(addresscodec.NewBech32Codec("cosmosvaloper"), addresscodec.NewBech32Codec("cosmos")), args)
 }
+
+// MsgEditValidatorExec creates an edit-validator message.
+func MsgEditValidatorExec(
+	clientCtx client.Context,
+	from sdk.AccAddress,
+	minSelfDelegation math.Int,
+	extraArgs ...string,
+) (testutil.BufferWriter, error) {
+	args := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, from.String()),
+		fmt.Sprintf("--%s=%s", stakingcli.FlagMinSelfDelegation, minSelfDelegation.String()),
+	}
+
+	args = append(args, commonArgs...)
+	args = append(args, extraArgs...)
+	return clitestutil.ExecTestCLICmd(clientCtx, stakingcli.NewEditValidatorCmd(addresscodec.NewBech32Codec("cosmosvaloper")), args)
+}
